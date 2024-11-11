@@ -5,26 +5,16 @@
 Camera* camera;
 Projection* proj;
 
-#define MAX_INDEX 12
-#define MAX_INDEX13 2
-
-#define ID_TRI 0
-#define ID_RECT 1
-#define ID_PENTA 2
-#define ID_OCTA 3
-
-#define PROJED true
 
 
 GLvoid Mouse(int button, int state, int x, int y);
 GLvoid Keyboard(unsigned char key, int x, int y);
 GLvoid specialKeyboard(int key, int x, int y);
 GLvoid MyThrow(int value);
+GLvoid MyGen(int value);
 
 
 
-
-Diagram playground[3];
 
 
 bool depthed = true;
@@ -58,28 +48,6 @@ int baseAxisIndex = 0;
 int mulcount = 1;
 
 
-GLvoid Setplayground() {
-
-	for (int i = 0; i < 3; i++) {
-
-		playground[i].center = {0.0f, 0.0f, 0.0f};
-
-		playground[i].radian = {0.0f, 0.0f, 0.0f};
-
-		playground[i].Stretch = {0.2f, 0.2f, 0.2f};
-
-		playground[i].Orbit = {0.0f, 0.0f, 0.0f};
-
-	}
-
-	playground[0].postype = ID_TRI;
-
-	playground[1].postype = ID_RECT;
-
-	playground[2].postype = ID_TRI;
-
-}
-
 
 GLvoid SetCamera() {
 	delete camera;
@@ -112,6 +80,7 @@ void DepthCheck() {
 void Setindex() {
 	int* p1 = tri->AddIndexList();
 	int* p2 = rect->AddIndexList();
+	int* p3 = pent->AddIndexList();
 
 	cout << sizeof((p1));
 
@@ -120,7 +89,7 @@ void Setindex() {
 	int begin = cnt;
 
 
-
+	tri->start_index = 0;
 
 	for (index_count; index_count < 3; index_count++) {
 		index[index_count] = p1[index_count];
@@ -128,8 +97,6 @@ void Setindex() {
 		cnt++;
 	}
 
-	tri->start_index = 0;
-	//cnt += 36;
 
 	present_bit = index_count;
 
@@ -148,13 +115,15 @@ void Setindex() {
 	present_bit = index_count;
 	begin = cnt;
 
-	//pyr->start_index = index_count;
+	pent->start_index = index_count;
 
-	//for (index_count; index_count < present_bit + 18; index_count++) {
-	//	index[index_count] = 12 + p3[index_count - begin];
-	//}
+	for (index_count; index_count < present_bit + 9; index_count++) {
+		index[index_count] = 7 + p3[index_count - begin];
 
-	cnt += 15;
+		cnt++;
+	}
+
+	//cnt += 15;
 
 
 	//present_bit = index_count;
@@ -171,6 +140,7 @@ void Setindex() {
 
 	free(p1);
 	free(p2);
+	free(p3);
 }
 
 MyObjCol SetRandObjCol() {
@@ -204,14 +174,11 @@ GLvoid SetBuffer() {
 
 	tri->Setcol(mycol);
 	rect->Setcol(mycol2);
-	//pyr->Setcol(mycol3);
+	pent->Setcol(mycol3);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	//glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), NULL, GL_DYNAMIC_DRAW);
 	glBufferData(GL_ARRAY_BUFFER, (MAX_INDEX * 10000) * sizeof(GLfloat), NULL, GL_DYNAMIC_DRAW);
-	tri->SetPos();
-	rect->SetPos();
-	//pyr->SetPos();
 
 	//float* counter = new FLOAT();
 	int* counter = new INT();
@@ -236,12 +203,12 @@ GLvoid SetBuffer() {
 		(*counter) += 3 * sizeof(GLfloat);
 	}
 
-	//for (int i = 0; i < 5; i++) {
-	//	glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-	//		3 * sizeof(GLfloat), pyr->pos[i]);
+	for (int i = 0; i < 5; i++) {
+		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+			3 * sizeof(GLfloat), pent->pos[i]);
 
-	//	(*counter) += 3 * sizeof(GLfloat);
-	//}
+		(*counter) += 3 * sizeof(GLfloat);
+	}
 
 
 
@@ -286,12 +253,12 @@ GLvoid SetBuffer() {
 		(*counter) += 3 * sizeof(GLfloat);
 	}
 
-	//for (int i = 0; i < 5; i++) {
-	//	glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-	//		3 * sizeof(GLfloat), pyr->col[i]);
+	for (int i = 0; i < 5; i++) {
+		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+			3 * sizeof(GLfloat), pent->col[i]);
 
-	//	(*counter) += 3 * sizeof(GLfloat);
-	//}
+		(*counter) += 3 * sizeof(GLfloat);
+	}
 
 
 
@@ -343,6 +310,7 @@ void main(int argc, char** argv) { //--- 윈도우 출력하고 콜백함수 설정 { //--- �
 	SetProjection(PROJ_PERSPECTIVE);
 	tri->SetTranPos(20);
 	rect->SetTranPos(20);
+
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	glEnable(GL_DEPTH_TEST);
@@ -354,7 +322,10 @@ void main(int argc, char** argv) { //--- 윈도우 출력하고 콜백함수 설정 { //--- �
 	glutSpecialFunc(specialKeyboard);
 	glutMouseFunc(Mouse);
 
-
+	//for (int i = 0; i < 3; i++) {
+	//	glutTimerFunc(10, MyMove, i);
+	//}
+	glutTimerFunc(1000, MyGen, 0);
 
 
 
@@ -423,7 +394,6 @@ void drawScene()
 
 
 
-		model *= InitRotateProj(playground[i].Orbit, {0.0f, 0.0f, 0.0f});
 		model *= InitRotateProj(playground[i].radian, playground[i].center);
 		model *= InitMoveProj(playground[i].center);
 		//model *= InitScaleProj(playground.Stretch);
@@ -458,11 +428,11 @@ void drawScene()
 			counter += 6;
 			break;
 		case ID_PENTA:
-			counter = rect->start_index;
+			counter = pent->start_index;
 			submodel = model;
-			submodel *= rect->GetWorldTransMatrix();
+			submodel *= pent->GetWorldTransMatrix();
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
+			glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
 
 			break;
 		case ID_OCTA:
@@ -579,6 +549,9 @@ GLvoid specialKeyboard(int key, int x, int y) {
 		break;
 	}
 
+
+
+
 	glutPostRedisplay();
 }
 
@@ -628,46 +601,14 @@ GLvoid MyCw(int value) {
 }
 
 
-GLvoid OrbitCcw(int value) {
 
-	playground[value].Orbit += Vec3ToGLPos(playground[value].OrbitAxis) * 5;
+GLvoid MyGen(int value) {
 
-	if (goorbit && playground[value].orbitccw) {
-		glutTimerFunc(30, OrbitCcw, value);
-	}
-	glutPostRedisplay();
+	SetNewplayground(value);
+
+	glutTimerFunc(10, MyMove, value);
+	glutTimerFunc(1000, MyGen, (value + 1) % 3);
 }
-
-
-
-
-
-GLvoid OrbitCw(int value) {
-	playground[value].Orbit -= Vec3ToGLPos(playground[value].OrbitAxis) * 5;
-
-
-	if (goorbit && playground[value].orbitccw == false) {
-
-		if (endorbit && playground[value].Orbit.y <= -180) {
-			playground[value].center = playground[value].target;
-			playground[value].Orbit = 0.0f;
-
-			//glm::mat4 result = glm::mat4(1.0);
-
-			//result *= InitRotateProj(playground[value].Orbit, { 0.0f, 0.0f, 0.0f });
-			//result *= InitMoveProj(playground[value].center);
-			//result *= InitScaleProj(playground[value].Stretch);
-
-			//playground[value].center = GetProjedPos(playground[value].center, result);
-			//playground[value].Orbit = 0.0f;
-		}
-		else
-			glutTimerFunc(30, OrbitCw, value);
-	}
-	glutPostRedisplay();
-}
-
-
 
 GLvoid MyThrow(int value) {
 
