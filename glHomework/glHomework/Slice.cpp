@@ -19,6 +19,7 @@ Projection* proj;
 GLvoid Mouse(int button, int state, int x, int y);
 GLvoid Keyboard(unsigned char key, int x, int y);
 GLvoid specialKeyboard(int key, int x, int y);
+GLvoid MyThrow(int value);
 
 
 
@@ -668,3 +669,7 @@ GLvoid OrbitCw(int value) {
 
 
 
+GLvoid MyThrow(int value) {
+
+
+}

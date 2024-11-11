@@ -243,8 +243,6 @@ class Rect : public Diagram{
 public:
 	GLfloat pos[4][3];
 	GLPos center;
-	GLPos radian;
-	GLPos Stretch;
 	GLfloat col[4][3];
 
 	int mulcount;
@@ -259,8 +257,6 @@ public:
 
 
 		this->center = { 0.0f, 0.0f, 0.0f };
-		this->radian = { 0.0f, 0.0f, 0.0f };
-		this->Stretch = { 1.0f, 1.0f, 1.0f };
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 3; j++) {
 				this->col[i][j] = 0.0f;
@@ -322,8 +318,6 @@ public:
 		glm::mat4 result = glm::mat4(1.0f);
 
 		result *= InitMoveProj(center / mulcount);
-		result *= InitRotateProj(radian, center / mulcount);
-		result *= ChangeScale(Stretch, center / mulcount);
 
 		return result;
 	}
