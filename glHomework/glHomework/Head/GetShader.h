@@ -2,7 +2,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include "3DDiagram.h"
+#include "2DDiagram.h"
 #include <fstream>
 #include <sstream>
 
