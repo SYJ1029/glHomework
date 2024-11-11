@@ -6,7 +6,7 @@
 MyCol mycolor = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLPos Screensize = { 800, 800, 0 };
 GL_Tri* tri = new GL_Tri();
-Rect* rect = new GL_Rect();
+Rect* rect = new Rect();
 
 GLUquadricObj* qobj = gluNewQuadric();
 
