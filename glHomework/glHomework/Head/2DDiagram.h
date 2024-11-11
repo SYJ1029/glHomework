@@ -19,9 +19,9 @@ public:
 	GLPos radian;
 	int radcnt;
 	GLPos delta;
-	GLPos Stretch;
-	GLPos Orbit;
-	bool ccw, orbitccw;
+	GLPos speed;
+	GLfloat gravity;
+	bool ccw;
 
 	QuadSetting qset;
 
@@ -42,11 +42,11 @@ public:
 		radcnt = 1;
 
 		for (int i = 0; i < 3; i++) {
-			Stretch = { 1.0f };
+			speed = { 0.0f };
 		}
 
+		gravity = 1.0f;
 		ccw = true;
-		orbitccw = true;
 
 
 
@@ -244,6 +244,7 @@ public:
 	GLfloat pos[4][3];
 	GLPos center;
 	GLfloat col[4][3];
+	GLPos Stretch;
 
 	int mulcount;
 	int start_index;
@@ -263,6 +264,8 @@ public:
 			}
 		}
 
+
+		Stretch = 1.0f;
 		mulcount = 20;
 		start_index = 0;
 	}
@@ -333,6 +336,114 @@ public:
 		p[3] = 0;
 		p[4] = 2;
 		p[5] = 3;
+
+
+		return p;
+	}
+};
+
+
+class Pentagon : public Diagram {
+public:
+	GLfloat pos[5][3];
+	GLPos center;
+	GLfloat col[5][3];
+	GLPos Stretch;
+
+	int mulcount;
+	int start_index;
+
+	Pentagon() : Diagram() {
+		this->pos[0][0] = -100.0f, this->pos[0][1] = -100.0f, this->pos[0][2] = 0.0f;
+		this->pos[1][0] = 100.0f, this->pos[1][1] = -100.0f, this->pos[1][2] = 0.0f;
+		this->pos[2][0] = 100.0f, this->pos[2][1] = 75.0f, this->pos[2][2] = 0.0f;
+		this->pos[3][0] = 0.0f, this->pos[3][1] = 150.0f, this->pos[3][2] = 0.0f;
+		this->pos[4][0] = -100.0f, this->pos[4][1] = 75.0f, this->pos[4][2] = 0.0f;
+
+
+		this->center = { 0.0f, 0.0f, 0.0f };
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 3; j++) {
+				this->col[i][j] = 0.0f;
+			}
+		}
+
+
+		Stretch = 1.0f;
+		mulcount = 20;
+		start_index = 0;
+	}
+
+	void Setcol(MyObjCol col[5]) {
+		for (int i = 0; i < 5; i++) {
+			this->col[i][0] = col[i].R;
+			this->col[i][1] = col[i].G;
+			this->col[i][2] = col[i].B;
+		}
+	}
+
+	void SetTranPos(int mulcount) {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 3; j++) {
+				pos[i][j] /= this->mulcount;
+				pos[i][j] *= mulcount;
+			}
+		}
+
+		center = center / this->mulcount;
+		center = center * mulcount;
+
+		this->mulcount = mulcount;
+	}
+
+	void Move(GLPos Delta) {
+		center += Delta;
+	}
+
+	void Spin(GLPos Delta) {
+		// 회전축의 기준을 정할 때는 각 축 기준으로 쪼개서 각 radian 에게 넣어준다.
+
+		radian += Delta;
+	}
+
+	void InitScale(GLPos Delta) {
+
+		Stretch += Delta;
+	}
+
+	//bool GetCrash(GLPos token, GLPos target) {
+	//	GLPos prev = center + token;
+	//	GL_Rect newtoken = Getbb(prev, center);
+
+	//	return (target.x >= newtoken.pos1.x && target.x <= newtoken.pos2.x) &&
+	//		(target.y <= newtoken.pos2.y && target.y >= newtoken.pos1.y) &&
+	//		(target.z >= newtoken.pos2.z && target.z <= newtoken.pos1.z);
+
+	//}
+
+	glm::mat4 GetWorldTransMatrix() {
+		glm::mat4 result = glm::mat4(1.0f);
+
+		result *= InitMoveProj(center / mulcount);
+
+		return result;
+	}
+
+	int* AddIndexList() {
+		static int* p = (int*)malloc(3 * 3 * sizeof(int));
+
+
+		p[0] = 0;
+		p[1] = 1;
+		p[2] = 2;
+
+		p[3] = 0;
+		p[4] = 2;
+		p[5] = 3;
+
+		p[6] = 0;
+		p[7] = 3;
+		p[8] = 4;
 
 
 		return p;
