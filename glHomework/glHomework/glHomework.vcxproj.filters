@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일\Head">
+      <UniqueIdentifier>{54a799f2-0f63-4725-a8c1-fae068bb4f30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Head\Proj">
+      <UniqueIdentifier>{8cdb6679-00f6-4c59-8acd-bc6490c93c55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="리소스 파일\Shader">
+      <UniqueIdentifier>{6dcd9704-94aa-4619-a8d4-27d5d3e798dc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GLM3D_NO14.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GLM3D_NO15.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GLM3D_NO16.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GLM3D_NO17.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GLMBasic_NO13.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Head\3DDiagram.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\BaseHeader.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\CheckPointQue.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\ColorStructs.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\GetShader.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\LoadDiagram.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\ObjStruct.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\ProjMethod.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\TimerProcedure.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\Triangle.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\VertexMethod.h">
+      <Filter>헤더 파일\Head</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\Proj\OPM.h">
+      <Filter>헤더 파일\Head\Proj</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\Proj\VPM.h">
+      <Filter>헤더 파일\Head\Proj</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\Proj\WPM.h">
+      <Filter>헤더 파일\Head\Proj</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Shader\fragment.txt">
+      <Filter>리소스 파일\Shader</Filter>
+    </Text>
+    <Text Include="Shader\vertex.txt">
+      <Filter>리소스 파일\Shader</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
