@@ -1,8 +1,7 @@
 #pragma once
 
-#include "TimerProcedure.h"
-#include "ProjMethod.h"
-#include "CheckPointQue.h"
+
+#include "DiaBaseHeader.h"
 
 #define POINT 0
 

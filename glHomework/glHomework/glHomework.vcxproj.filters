@@ -36,6 +36,9 @@
     <ClCompile Include="Head\LineDiagram.h">
       <Filter>헤더 파일\Diagramclass</Filter>
     </ClCompile>
+    <ClCompile Include="Head\DiaBaseHeader.h">
+      <Filter>헤더 파일\Diagramclass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Head\BaseHeader.h">
