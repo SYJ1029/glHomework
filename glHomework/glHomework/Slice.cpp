@@ -79,8 +79,8 @@ void DepthCheck() {
 
 void Setindex() {
 	int** p1 = (int**)malloc(3 * sizeof(int*));
-	int* p2 = rect->AddIndexList();
-	int* p3 = pent->AddIndexList();
+	int** p2 = (int**)malloc(3 * sizeof(int*));
+	int** p3 = (int**)malloc(3 * sizeof(int*));
 
 	cout << sizeof((p1));
 
@@ -89,7 +89,7 @@ void Setindex() {
 	int begin = cnt;
 	int indextoken = 0;
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < MAX_PERDIAGRAM; i++) {
 		tri[i]->start_index = index_count;
 		p1[i] = tri[i]->AddIndexList();
 
@@ -104,33 +104,35 @@ void Setindex() {
 
 		indextoken += 3;
 		begin = cnt;
-		//free(p1[i]);
-	}
 
 
-	rect->start_index = index_count;
+		rect[i]->start_index = index_count;
+		p2[i] = rect[i]->AddIndexList();
+		for (index_count; index_count < present_bit + 6; index_count++) {
+			index[index_count] = indextoken + p2[i][index_count - begin];
 
-	for (index_count; index_count < present_bit + 6; index_count++) {
-		index[index_count] = indextoken + p2[index_count - begin];
+			cnt++;
+		}
+		indextoken += 4;
 
-		cnt++;
-	}
-	indextoken += 4;
-	//cnt += 12;
-
-	present_bit = index_count;
-	begin = cnt;
-
-	pent->start_index = index_count;
-
-	for (index_count; index_count < present_bit + 9; index_count++) {
-		index[index_count] = indextoken + p3[index_count - begin];
-
-		cnt++;
-	}
+		present_bit = index_count;
+		begin = cnt;
 	
-	indextoken += 5;
-	//cnt += 15;
+
+		pent[i]->start_index = index_count;
+		p3[i] = pent[i]->AddIndexList();
+
+		for (index_count; index_count < present_bit + 9; index_count++) {
+			index[index_count] = indextoken + p3[i][index_count - begin];
+
+			cnt++;
+		}
+
+
+		indextoken += 5;
+		present_bit = index_count;
+		begin = cnt;
+	}
 
 
 	//present_bit = index_count;
@@ -166,28 +168,27 @@ GLvoid SetBuffer() {
 	MyObjCol coltoken = SetRandObjCol();
 
 
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < MAX_PERDIAGRAM; j++) {
 		for (int i = 0; i < 3; i++) {
 			mycol[i] = coltoken;
 		}
 		coltoken = SetRandObjCol();
 		tri[j]->Setcol(mycol);
-	}
-
-	for (int i = 0; i < 4; i++) {
-		mycol2[i] = coltoken;
-	}
-	coltoken = SetRandObjCol();
-
-
 	
 
-	for (int i = 0; i < 5; i++) {
-		mycol3[i] = coltoken;
-	}
 
-	rect->Setcol(mycol2);
-	pent->Setcol(mycol3);
+		for (int i = 0; i < 4; i++) {
+			mycol2[i] = coltoken;
+		}
+		coltoken = SetRandObjCol();
+		rect[j]->Setcol(mycol2);
+	
+	
+		for (int i = 0; i < 5; i++) {
+			mycol3[i] = coltoken;
+		}
+		pent[j]->Setcol(mycol3);
+	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	//glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), NULL, GL_DYNAMIC_DRAW);
@@ -201,30 +202,30 @@ GLvoid SetBuffer() {
 
 
 
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < MAX_PERDIAGRAM; j++) {
 		for (int i = 0; i < 3; i++) {
 			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
 				3 * sizeof(GLfloat), tri[j]->pos[i]);
 
 			(*counter) += 3 * sizeof(GLfloat);
 		}
+
+
+		for (int i = 0; i < 4; i++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), rect[j]->pos[i]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
+
+		for (int i = 0; i < 5; i++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), pent[j]->pos[i]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
+
 	}
-
-	for (int i = 0; i < 4; i++) {
-		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-			3 * sizeof(GLfloat), rect->pos[i]);
-
-		(*counter) += 3 * sizeof(GLfloat);
-	}
-
-	for (int i = 0; i < 5; i++) {
-		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-			3 * sizeof(GLfloat), pent->pos[i]);
-
-		(*counter) += 3 * sizeof(GLfloat);
-	}
-
-
 
 	//for (int i = 0; i < 6; i++) {
 	//	glBufferSubData(GL_ARRAY_BUFFER, (*counter),
@@ -248,7 +249,7 @@ GLvoid SetBuffer() {
 
 	(*counter) = 0;
 
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < MAX_PERDIAGRAM; j++) {
 
 		for (int i = 0; i < 3; i++) {
 			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
@@ -258,22 +259,22 @@ GLvoid SetBuffer() {
 
 			//cout << "(" << cube.pos[i][0] << ", " << cube.pos[i][1] << ", " << cube.pos[i][2] << ')' << endl << endl;
 		}
+
+
+		for (int i = 0; i < 4; i++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), rect[j]->col[i]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
+
+		for (int i = 0; i < 5; i++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), pent[j]->col[i]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
 	}
-
-	for (int i = 0; i < 4; i++) {
-		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-			3 * sizeof(GLfloat), rect->col[i]);
-
-		(*counter) += 3 * sizeof(GLfloat);
-	}
-
-	for (int i = 0; i < 5; i++) {
-		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-			3 * sizeof(GLfloat), pent->col[i]);
-
-		(*counter) += 3 * sizeof(GLfloat);
-	}
-
 
 
 
@@ -323,10 +324,7 @@ void main(int argc, char** argv) { //--- 윈도우 출력하고 콜백함수 설정 { //--- �
 	Setplayground();
 	SetCamera();
 	SetProjection(PROJ_PERSPECTIVE);
-	for (int i = 0; i < 3; i++) {
-		tri[i]->SetTranPos(200);
-	}
-	rect->SetTranPos(200);
+
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -439,19 +437,19 @@ void drawScene()
 			counter += 3;
 			break;
 		case ID_RECT:
-			counter = rect->start_index;
+			counter = rect[playground[i].indexcnt]->start_index;
 			submodel = model;
 
-			submodel *= rect->GetWorldTransMatrix();
+			submodel *= rect[playground[i].indexcnt]->GetWorldTransMatrix();
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
 
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
 			counter += 6;
 			break;
 		case ID_PENTA:
-			counter = pent->start_index;
+			counter = pent[playground[i].indexcnt]->start_index;
 			submodel = model;
-			submodel *= pent->GetWorldTransMatrix();
+			submodel *= pent[playground[i].indexcnt]->GetWorldTransMatrix();
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
 			glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
 
