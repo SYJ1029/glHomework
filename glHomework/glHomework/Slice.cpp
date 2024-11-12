@@ -52,7 +52,7 @@ int mulcount = 1;
 GLvoid SetCamera() {
 	delete camera;
 
-	camera = new Camera(glm::vec3(0.0f, 0.0f, 90.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 99.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 GLvoid SetProjection(int projtype) {
@@ -64,7 +64,7 @@ GLvoid SetProjection(int projtype) {
 		proj->InitOrtho(-5.0f, 5.0f, 5.0f, -5.0f, -30.0f, 15.0f);
 	}
 	else {
-		proj->InitPerspective(glm::radians(160.0f), 1.0f, 0.1f, 100.0f);
+		proj->InitPerspective(glm::radians(170.0f), 1.0f, 0.001f, 100.0f);
 	}
 
 	IsobjsProjed(false);
@@ -78,7 +78,7 @@ void DepthCheck() {
 }
 
 void Setindex() {
-	int* p1 = tri->AddIndexList();
+	int** p1 = (int**)malloc(3 * sizeof(int*));
 	int* p2 = rect->AddIndexList();
 	int* p3 = pent->AddIndexList();
 
@@ -87,29 +87,35 @@ void Setindex() {
 	int present_bit = index_count;
 	int cnt = 0;
 	int begin = cnt;
+	int indextoken = 0;
+
+	for (int i = 0; i < 3; i++) {
+		tri[i]->start_index = index_count;
+		p1[i] = tri[i]->AddIndexList();
+
+		for (index_count; index_count < present_bit + 3; index_count++) {
+			index[index_count] = indextoken + p1[i][index_count - begin];
+
+			cnt++;
+		}
 
 
-	tri->start_index = 0;
+		present_bit = index_count;
 
-	for (index_count; index_count < 3; index_count++) {
-		index[index_count] = p1[index_count];
-
-		cnt++;
+		indextoken += 3;
+		begin = cnt;
+		//free(p1[i]);
 	}
 
-
-	present_bit = index_count;
-
-	begin = cnt;
 
 	rect->start_index = index_count;
 
 	for (index_count; index_count < present_bit + 6; index_count++) {
-		index[index_count] = 3 + p2[index_count - begin];
+		index[index_count] = indextoken + p2[index_count - begin];
 
 		cnt++;
 	}
-
+	indextoken += 4;
 	//cnt += 12;
 
 	present_bit = index_count;
@@ -118,11 +124,12 @@ void Setindex() {
 	pent->start_index = index_count;
 
 	for (index_count; index_count < present_bit + 9; index_count++) {
-		index[index_count] = 7 + p3[index_count - begin];
+		index[index_count] = indextoken + p3[index_count - begin];
 
 		cnt++;
 	}
-
+	
+	indextoken += 5;
 	//cnt += 15;
 
 
@@ -152,27 +159,33 @@ MyObjCol SetRandObjCol() {
 
 
 GLvoid SetBuffer() {
-	MyObjCol mycol[8];
+	MyObjCol mycol[3];
 	MyObjCol mycol2[4];
 	MyObjCol mycol3[5];
 
 	MyObjCol coltoken = SetRandObjCol();
 
-	for (int i = 0; i < 3; i++) {
-		mycol[i] = coltoken;
+
+	for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < 3; i++) {
+			mycol[i] = coltoken;
+		}
+		coltoken = SetRandObjCol();
+		tri[j]->Setcol(mycol);
 	}
-	coltoken = SetRandObjCol();
 
 	for (int i = 0; i < 4; i++) {
 		mycol2[i] = coltoken;
 	}
 	coltoken = SetRandObjCol();
 
+
+	
+
 	for (int i = 0; i < 5; i++) {
 		mycol3[i] = coltoken;
 	}
 
-	tri->Setcol(mycol);
 	rect->Setcol(mycol2);
 	pent->Setcol(mycol3);
 
@@ -188,13 +201,14 @@ GLvoid SetBuffer() {
 
 
 
-	for (int i = 0; i < 3; i++) {
-		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-			3 * sizeof(GLfloat), tri->pos[i]);
+	for (int j = 0; j < 3; j++) {
+		for (int i = 0; i < 3; i++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), tri[j]->pos[i]);
 
-		(*counter) += 3 * sizeof(GLfloat);
+			(*counter) += 3 * sizeof(GLfloat);
+		}
 	}
-
 
 	for (int i = 0; i < 4; i++) {
 		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
@@ -234,16 +248,16 @@ GLvoid SetBuffer() {
 
 	(*counter) = 0;
 
+	for (int j = 0; j < 3; j++) {
 
-	for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), tri[j]->col[i]);
 
+			(*counter) += 3 * sizeof(GLfloat);
 
-		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-			3 * sizeof(GLfloat), tri->col[i]);
-
-		(*counter) += 3 * sizeof(GLfloat);
-
-		//cout << "(" << cube.pos[i][0] << ", " << cube.pos[i][1] << ", " << cube.pos[i][2] << ')' << endl << endl;
+			//cout << "(" << cube.pos[i][0] << ", " << cube.pos[i][1] << ", " << cube.pos[i][2] << ')' << endl << endl;
+		}
 	}
 
 	for (int i = 0; i < 4; i++) {
@@ -304,12 +318,15 @@ void main(int argc, char** argv) { //--- 윈도우 출력하고 콜백함수 설정 { //--- �
 
 
 	glBindVertexArray(vao);
+	InitDiagram();
 	SetBuffer();
 	Setplayground();
 	SetCamera();
 	SetProjection(PROJ_PERSPECTIVE);
-	tri->SetTranPos(20);
-	rect->SetTranPos(20);
+	for (int i = 0; i < 3; i++) {
+		tri[i]->SetTranPos(200);
+	}
+	rect->SetTranPos(200);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -369,6 +386,7 @@ void drawScene()
 
 
 	int counter = 0;
+	int randnum = (int)((float)rand() / RAND_MAX + 0.5f);
 
 
 
@@ -408,13 +426,16 @@ void drawScene()
 
 		switch (playground[i].postype) {
 		case ID_TRI:
-			counter = tri->start_index;
+
+
+			counter = tri[playground[i].indexcnt]->start_index;
 			submodel = model;
 
-			submodel *= tri->GetWorldTransMatrix();
+			submodel *= tri[playground[i].indexcnt]->GetWorldTransMatrix();
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
 
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
+
 			counter += 3;
 			break;
 		case ID_RECT:

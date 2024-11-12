@@ -17,7 +17,7 @@ public:
 	GLPos center;
 	GLPos target;
 	GLPos radian;
-	int radcnt;
+	int indexcnt;
 	GLPos delta;
 	GLPos speed;
 	GLfloat gravity;
@@ -39,7 +39,7 @@ public:
 		OrbitAxis = glm::vec3(0.0f, 1.0f, 0.0f);
 		delta = { 0, 0, 0 };
 
-		radcnt = 1;
+		indexcnt = 0;
 
 		for (int i = 0; i < 3; i++) {
 			speed = { 0.0f };
@@ -91,7 +91,7 @@ public:
 		radian = { 0 };
 		axis = { 0, 0, 0 };
 
-		radcnt = 1;
+		indexcnt = 0;
 	}
 
 	void Setcol(MyObjCol col[]) {
@@ -111,15 +111,15 @@ public:
 	}
 
 
-	void SetSpin(bool ccw, glm::vec3 axis) {
+	//void SetSpin(bool ccw, glm::vec3 axis) {
 
-		this->axis = axis;
+	//	this->axis = axis;
 
-		if (ccw)
-			radcnt = 1;
-		else
-			radcnt = -1;
-	}
+	//	if (ccw)
+	//		indexcnt = 1;
+	//	else
+	//		radcnt = -1;
+	//}
 
 	void Spin() {
 
