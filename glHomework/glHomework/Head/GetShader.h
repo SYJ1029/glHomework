@@ -3,7 +3,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "2DDiagram.h"
-#include "LineDiagram.h"
 #include <fstream>
 #include <sstream>
 
