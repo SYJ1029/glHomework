@@ -16,9 +16,9 @@
 
 MyCol mycolor = { 1.0f, 1.0f, 1.0f, 1.0f };
 GLPos Screensize = { 800, 800, 0 };
-GL_Tri** tri = (GL_Tri**)malloc(3 * sizeof(GL_Tri*));
-Rect* rect = new Rect();
-Pentagon* pent = new Pentagon();
+GL_Tri** tri = (GL_Tri**)malloc(MAX_PERDIAGRAM * sizeof(GL_Tri*));
+Rect** rect = (Rect**)malloc(MAX_PERDIAGRAM * sizeof(Rect*));
+Pentagon** pent = (Pentagon**)malloc(MAX_PERDIAGRAM * sizeof(Pentagon*));
 
 GLUquadricObj* qobj = gluNewQuadric();
 
@@ -27,10 +27,14 @@ GLUquadricObj* qobj = gluNewQuadric();
 Diagram playground[3];
 
 GLvoid InitDiagram() {
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < MAX_PERDIAGRAM; i++) {
 		tri[i] = new GL_Tri();
+		rect[i] = new Rect();
+		pent[i] = new Pentagon();
+		//tri[i]->SetTranPos(200);
+		//rect[i]->SetTranPos(200);
+		//pent[i]->SetTranPos(200);
 	}
-
 }
 
 GLvoid SetGraph(int index) {
@@ -89,7 +93,7 @@ GLvoid MyMove(int value) {
 GLvoid IsobjsProjed(bool proj) {
 	if (proj) {
 		tri[0]->SetTranPos(SIZEMAKRO);
-		rect->SetTranPos(SIZEMAKRO);
+		rect[0]->SetTranPos(SIZEMAKRO);
 	}
 
 }
