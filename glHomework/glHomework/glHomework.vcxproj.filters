@@ -47,13 +47,7 @@
     <ClInclude Include="Head\GetShader.h">
       <Filter>헤더 파일\Head</Filter>
     </ClInclude>
-    <ClInclude Include="Head\LoadDiagram.h">
-      <Filter>헤더 파일\Head</Filter>
-    </ClInclude>
     <ClInclude Include="Head\ObjStruct.h">
-      <Filter>헤더 파일\Head</Filter>
-    </ClInclude>
-    <ClInclude Include="Head\ProjMethod.h">
       <Filter>헤더 파일\Head</Filter>
     </ClInclude>
     <ClInclude Include="Head\TimerProcedure.h">
@@ -78,6 +72,12 @@
       <Filter>헤더 파일\Diagramclass</Filter>
     </ClInclude>
     <ClInclude Include="Head\3DDiagram.h">
+      <Filter>헤더 파일\Diagramclass</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\ProjMethod.h">
+      <Filter>헤더 파일\Head\Proj</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\LoadDiagram.h">
       <Filter>헤더 파일\Diagramclass</Filter>
     </ClInclude>
   </ItemGroup>

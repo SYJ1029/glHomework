@@ -19,8 +19,10 @@ GLPos Screensize = { 800, 800, 0 };
 GL_Tri** tri = (GL_Tri**)malloc(MAX_PERDIAGRAM * sizeof(GL_Tri*));
 Rect** rect = (Rect**)malloc(MAX_PERDIAGRAM * sizeof(Rect*));
 Pentagon** pent = (Pentagon**)malloc(MAX_PERDIAGRAM * sizeof(Pentagon*));
+GL_Line* line = new GL_Line();
 
 GLUquadricObj* qobj = gluNewQuadric();
+
 
 
 
@@ -39,7 +41,7 @@ GLvoid InitDiagram() {
 
 GLvoid SetGraph(int index) {
 
-	playground[index].center += {(float)((float)rand() / RAND_MAX) * 400, ((float)((float)rand() / RAND_MAX) * 600) - 400.0f, 0.0f};
+	playground[index].center += {0, ((float)((float)rand() / RAND_MAX) * 600) - 400.0f, 0.0f};
 
 	playground[index].speed = { -20.0f, 15.0f, 0.0f };
 	playground[index].gravity = 0.2f;
@@ -49,7 +51,7 @@ GLvoid Setplayground() {
 
 	for (int i = 0; i < 3; i++) {
 
-		playground[i].center = { 1300.0f, 0.0f, 0.0f };
+		playground[i].center = { 1143 + 200.0f, 0.0f, 0.0f };
 
 		playground[i].radian = { 0.0f, 0.0f, 0.0f };
 
@@ -66,7 +68,7 @@ GLvoid Setplayground() {
 }
 
 GLvoid SetNewplayground(int i) {
-	playground[i].center = { 1300.0f, 0.0f, 0.0f };
+	playground[i].center = { 1143 + 200.0f, 0.0f, 0.0f };
 
 	playground[i].radian = { 0.0f, 0.0f, 0.0f };
 
@@ -99,5 +101,9 @@ GLvoid IsobjsProjed(bool proj) {
 	}
 
 }
+
+
+
+
 
 

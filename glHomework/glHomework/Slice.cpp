@@ -8,6 +8,7 @@ Projection* proj;
 
 
 GLvoid Mouse(int button, int state, int x, int y);
+GLvoid MouseMove(int x, int y);
 GLvoid Keyboard(unsigned char key, int x, int y);
 GLvoid specialKeyboard(int key, int x, int y);
 GLvoid MyThrow(int value);
@@ -49,10 +50,52 @@ int mulcount = 1;
 
 
 
+
+GLPos WintoGL(int x, int y, int w, int h, Camera& camera, Projection& proj) {
+	GLPos newpos;
+
+
+	newpos.x = ((float)x - (float)(w / 2));
+	newpos.x /= ((float)w / 2);
+	newpos.y = ((float)y - (float)(h / 2));
+	newpos.y /= ((float)h / 2);
+
+	newpos.y = newpos.y * -1;
+
+	newpos.z = 0.0f;
+
+
+
+
+	glm::vec3 token = GLPosToVec3(newpos);
+
+
+	glm::mat4 model = glm::mat4(1.0f);
+	glm::vec4 newtoken = glm::vec4(token, 1.0f);
+	glm::mat4 newview = glm::inverse(camera.GetViewMatix());
+
+	model = glm::inverse(proj.GetProjMatrix());
+	newview *= model;
+	newtoken = newview * newtoken;
+	newtoken /= newtoken.w;
+
+
+	newpos = Vec3ToGLPos(newtoken);
+
+
+
+
+	newpos.z = 0.0f;
+
+
+	return newpos;
+}
+
+
 GLvoid SetCamera() {
 	delete camera;
 
-	camera = new Camera(glm::vec3(0.0f, 0.0f, 99.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 3000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 GLvoid SetProjection(int projtype) {
@@ -64,7 +107,7 @@ GLvoid SetProjection(int projtype) {
 		proj->InitOrtho(-5.0f, 5.0f, 5.0f, -5.0f, -30.0f, 15.0f);
 	}
 	else {
-		proj->InitPerspective(glm::radians(170.0f), 1.0f, 0.001f, 100.0f);
+		proj->InitPerspective(glm::radians(45.0f), 1.0f, 2000.0f, 4000.0f);
 	}
 
 	IsobjsProjed(false);
@@ -82,7 +125,6 @@ void Setindex() {
 	int** p2 = (int**)malloc(3 * sizeof(int*));
 	int** p3 = (int**)malloc(3 * sizeof(int*));
 
-	cout << sizeof((p1));
 
 	int present_bit = index_count;
 	int cnt = 0;
@@ -135,13 +177,13 @@ void Setindex() {
 	}
 
 
-	//present_bit = index_count;
-	//baseAxisIndex = index_count;
+	line->start_index = index_count;
 
-	//for (index_count; index_count < present_bit + 6; index_count++, index_array_count++) {
-	//	index[index_count] = 12 + 5 + index_array_count;
-	//}
+	for (index_count; index_count < present_bit + 2; index_count++, index_array_count++) {
+		index[index_count] = indextoken + index_array_count;
+	}
 
+	indextoken += 2;
 
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -150,6 +192,8 @@ void Setindex() {
 	free(p1);
 	free(p2);
 	free(p3);
+
+
 }
 
 MyObjCol SetRandObjCol() {
@@ -159,11 +203,11 @@ MyObjCol SetRandObjCol() {
 }
 
 
-
-GLvoid SetBuffer() {
+GLvoid SetColor() {
 	MyObjCol mycol[3];
 	MyObjCol mycol2[4];
 	MyObjCol mycol3[5];
+	MyObjCol mycol4[2];
 
 	MyObjCol coltoken = SetRandObjCol();
 
@@ -174,7 +218,7 @@ GLvoid SetBuffer() {
 		}
 		coltoken = SetRandObjCol();
 		tri[j]->Setcol(mycol);
-	
+
 
 
 		for (int i = 0; i < 4; i++) {
@@ -182,13 +226,26 @@ GLvoid SetBuffer() {
 		}
 		coltoken = SetRandObjCol();
 		rect[j]->Setcol(mycol2);
-	
-	
+
+
 		for (int i = 0; i < 5; i++) {
 			mycol3[i] = coltoken;
 		}
 		pent[j]->Setcol(mycol3);
 	}
+
+	for (int i = 0; i < 2; i++) {
+		mycol4[i].R = base_axis_col[i][0];
+		mycol4[i].G = base_axis_col[i][1];
+		mycol4[i].B = base_axis_col[i][2];
+	}
+	coltoken = SetRandObjCol();
+	line->Setcol(mycol4);
+}
+
+
+GLvoid SetBuffer() {
+	
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	//glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), NULL, GL_DYNAMIC_DRAW);
@@ -227,12 +284,12 @@ GLvoid SetBuffer() {
 
 	}
 
-	//for (int i = 0; i < 6; i++) {
-	//	glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-	//		3 * sizeof(GLfloat), base_axis[i]);
+	for (int i = 0; i < 2; i++) {
+		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+			3 * sizeof(GLfloat), line->pos[i]);
 
-	//	(*counter) += 3 * sizeof(GLfloat);
-	//}
+		(*counter) += 3 * sizeof(GLfloat);
+	}
 
 	index_count = 0;
 	index_array_count = 0;
@@ -276,7 +333,12 @@ GLvoid SetBuffer() {
 		}
 	}
 
+	for (int i = 0; i < 2; i++) {
+		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+			3 * sizeof(GLfloat), line->col[i]);
 
+		(*counter) += 3 * sizeof(GLfloat);
+	}
 
 	//for (int i = 0; i < 6; i++) {
 	//	glBufferSubData(GL_ARRAY_BUFFER, (*counter),
@@ -320,6 +382,7 @@ void main(int argc, char** argv) { //--- 윈도우 출력하고 콜백함수 설정 { //--- �
 
 	glBindVertexArray(vao);
 	InitDiagram();
+	SetColor();
 	SetBuffer();
 	Setplayground();
 	SetCamera();
@@ -336,6 +399,7 @@ void main(int argc, char** argv) { //--- 윈도우 출력하고 콜백함수 설정 { //--- �
 	glutKeyboardFunc(Keyboard);
 	glutSpecialFunc(specialKeyboard);
 	glutMouseFunc(Mouse);
+	glutMotionFunc(MouseMove);
 
 	//for (int i = 0; i < 3; i++) {
 	//	glutTimerFunc(10, MyMove, i);
@@ -380,7 +444,7 @@ void drawScene()
 
 	glBindVertexArray(vao);
 
-
+	SetBuffer();
 
 
 	int counter = 0;
@@ -464,7 +528,12 @@ void drawScene()
 
 
 
-
+	if (line->draw) {
+		counter = line->start_index;
+		submodel = glm::mat4(1.0f);
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
+		glDrawElements(GL_LINES, 2, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
+	}
 
 
 
@@ -491,12 +560,40 @@ GLvoid Reshape(int w, int h) { //--- 콜백 함수: 다시 그리기 콜백 함수 {
 
 
 GLvoid Mouse(int button, int state, int x, int y) {
+	GLPos newpos;
+	bool mouseIn = false;
+	MyObjCol coltoken[3] = { SetRandObjCol(), SetRandObjCol(), SetRandObjCol() };
 
+	if (state == GLUT_DOWN) {
+		newpos = WintoGL(x, y, Screensize.x, Screensize.y, *camera, *proj);
+		switch (button) {
+		case GLUT_LEFT_BUTTON:
+			line->InitFirstPos(newpos);
+			break;
+		case GLUT_RIGHT_BUTTON:
+			break;
+		case GLUT_MIDDLE_BUTTON:
+			break;
+		default:
+			break;
+		}
+
+	}
+	else {
+
+		line->EndSetPos();
+	}
 
 	glutPostRedisplay();
 }
 
+GLvoid MouseMove(int x, int y) {
+	GLPos newpos = WintoGL(x, y, Screensize.x, Screensize.y, *camera, *proj);
 
+	line->UpdateEndPos(newpos);
+
+	glutPostRedisplay();
+}
 
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
