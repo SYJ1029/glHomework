@@ -39,9 +39,9 @@ GLvoid InitDiagram() {
 
 GLvoid SetGraph(int index) {
 
-	playground[index].center += {(float)((float)rand() / RAND_MAX) * 400, ((float)((float)rand() / RAND_MAX) * 800) - 150.0f, 0.0f};
+	playground[index].center += {(float)((float)rand() / RAND_MAX) * 400, ((float)((float)rand() / RAND_MAX) * 600) - 400.0f, 0.0f};
 
-	playground[index].speed = { -20.0f, 10.0f, 0.0f };
+	playground[index].speed = { -20.0f, 15.0f, 0.0f };
 	playground[index].gravity = 0.2f;
 }
 
@@ -66,7 +66,7 @@ GLvoid Setplayground() {
 }
 
 GLvoid SetNewplayground(int i) {
-	playground[i].center = { 1200.0f, 0.0f, 0.0f };
+	playground[i].center = { 1300.0f, 0.0f, 0.0f };
 
 	playground[i].radian = { 0.0f, 0.0f, 0.0f };
 
