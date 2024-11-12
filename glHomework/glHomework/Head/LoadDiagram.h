@@ -61,7 +61,7 @@ GLvoid Setplayground() {
 
 	playground[1].postype = ID_RECT;
 
-	playground[2].postype = ID_TRI;
+	playground[2].postype = ID_PENTA;
 
 }
 
