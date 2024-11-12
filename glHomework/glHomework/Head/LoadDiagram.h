@@ -83,7 +83,9 @@ GLvoid MyMove(int value) {
 	playground[value].center += playground[value].speed;
 
 
-	if (playground[value].center.x <= -1300 || playground[value].center.y <= -1300);
+	if (playground[value].center.x <= -1300 || playground[value].center.y <= -1300) {
+		SetNewplayground(value);
+	}
 	else
 		glutTimerFunc(10, MyMove, value);
 	glutPostRedisplay();
