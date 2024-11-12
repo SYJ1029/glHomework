@@ -455,7 +455,31 @@ public:
 
 
 class GL_Line {
+public:
+	bool draw;
+
+	GLfloat pos[2][3];
+	GLfloat col[2][3];
+
+	GL_Line() {
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 3; j++) {
+				col[i][j] = 0.0f;
+				pos[i][j] = 0.0f;
+			}
+		}
+
+	}
+
+	int* AddIndexList() {
+		static int* p = (int*)malloc(2 * sizeof(int));
 
 
+		p[0] = 0;
+		p[1] = 1;
+
+
+		return p;
+	}
 
 };
