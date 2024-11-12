@@ -151,8 +151,8 @@ public:
 
 	GL_Tri() : Diagram(){
 		this->pos[0][0] = 0.0f,this->pos[0][1] =  50.0f * glm::sqrt(3.0f), this->pos[0][2] = 0.0f;
-		this->pos[1][0] = -100.0f, this->pos[1][1] =  - 100.0f, this->pos[1][2] = 0.0f;
-		this->pos[2][0] = 100.0f, this->pos[2][1] =  - 100.0f, this->pos[2][2] =  0.0f;
+		this->pos[1][0] = -100.0f, this->pos[1][1] =  -100.0f, this->pos[1][2] = 0.0f;
+		this->pos[2][0] = 100.0f, this->pos[2][1] =  -100.0f, this->pos[2][2] =  0.0f;
 
 		this->center = { 0.0f, 0.0f, 0.0f };
 		this->radian = { 0.0f, 0.0f, 0.0f };
@@ -163,7 +163,7 @@ public:
 			}
 		}
 
-		mulcount = 20;
+		mulcount = 200;
 		start_index = 0;
 	}
 
@@ -218,9 +218,9 @@ public:
 	glm::mat4 GetWorldTransMatrix() {
 		glm::mat4 result = glm::mat4(1.0f);
 
-		result *= InitMoveProj(center / mulcount);
-		result *= InitRotateProj(radian, center / mulcount);
-		result *= ChangeScale(Stretch, center / mulcount);
+		result *= InitMoveProj(center);
+		result *= InitRotateProj(radian, center);
+		result *= ChangeScale(Stretch, center);
 
 		return result;
 	}
@@ -267,7 +267,7 @@ public:
 
 
 		Stretch = 1.0f;
-		mulcount = 20;
+		mulcount = 200;
 		start_index = 0;
 	}
 
@@ -371,7 +371,7 @@ public:
 
 
 		Stretch = 1.0f;
-		mulcount = 20;
+		mulcount = 200;
 		start_index = 0;
 	}
 
@@ -460,6 +460,7 @@ public:
 
 	GLfloat pos[2][3];
 	GLfloat col[2][3];
+	int start_index;
 
 	GL_Line() {
 		for (int i = 0; i < 2; i++) {
@@ -469,6 +470,38 @@ public:
 			}
 		}
 
+		draw = false;
+		start_index = 0;
+	}
+
+	void Setcol(MyObjCol col[2]) {
+		for (int i = 0; i < 2; i++) {
+			this->col[i][0] = col[i].R;
+			this->col[i][1] = col[i].G;
+			this->col[i][2] = col[i].B;
+		}
+	}
+
+	void InitFirstPos(GLPos pos) {
+		this->pos[0][0] = pos.x;
+		this->pos[0][1] = pos.y;
+		this->pos[0][2] = pos.z;
+
+		cout << "(" << this->pos[0][0] << ", " << this->pos[0][1] << ", " << this->pos[0][2] << ")" << endl << endl;
+	}
+
+	void UpdateEndPos(GLPos pos) {
+
+		this->pos[1][0] = pos.x;
+		this->pos[1][1] = pos.y;
+		this->pos[1][2] = pos.z;
+		draw = true;
+	}
+
+	void EndSetPos() {
+		cout << "(" << this->pos[1][0] << ", " << this->pos[1][1] << ", " << this->pos[1][2] << ")" << endl << endl;
+
+		draw = false;
 	}
 
 	int* AddIndexList() {

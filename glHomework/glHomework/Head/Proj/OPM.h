@@ -24,7 +24,7 @@ public:
 
 
 	Projection() {
-		projType = PROJ_PERSPECTIVE;
+		projType = PROJ_ORTHO;
 
 		left = 0.0f;
 		right = 0.0f;

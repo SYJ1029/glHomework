@@ -79,7 +79,7 @@ GLPos Vec3ToGLPos(glm::vec3 vector) {
 }
 
 glm::vec3 GLPosToVec3(GLPos pos) {
-	glm::vec3 result = { pos.x, pos.y, pos.z };
+	glm::vec3 result = glm::vec3(pos.x, pos.y, pos.z);
 
 
 	return result;
