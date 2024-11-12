@@ -22,6 +22,7 @@
     <ClCompile Include="GLM3D_NO17.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Head\LineDiagram.h" />
     <ClCompile Include="Slice.cpp" />
   </ItemGroup>
   <ItemGroup>

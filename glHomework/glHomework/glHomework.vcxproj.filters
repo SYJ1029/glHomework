@@ -22,6 +22,9 @@
     <Filter Include="리소스 파일\Shader">
       <UniqueIdentifier>{6dcd9704-94aa-4619-a8d4-27d5d3e798dc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Diagramclass">
+      <UniqueIdentifier>{e64246b2-1001-459b-82ac-1ed62bba6561}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLM3D_NO17.cpp">
@@ -30,11 +33,11 @@
     <ClCompile Include="Slice.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Head\LineDiagram.h">
+      <Filter>헤더 파일\Diagramclass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Head\3DDiagram.h">
-      <Filter>헤더 파일\Head</Filter>
-    </ClInclude>
     <ClInclude Include="Head\BaseHeader.h">
       <Filter>헤더 파일\Head</Filter>
     </ClInclude>
@@ -75,7 +78,10 @@
       <Filter>헤더 파일\Head\Proj</Filter>
     </ClInclude>
     <ClInclude Include="Head\2DDiagram.h">
-      <Filter>헤더 파일\Head</Filter>
+      <Filter>헤더 파일\Diagramclass</Filter>
+    </ClInclude>
+    <ClInclude Include="Head\3DDiagram.h">
+      <Filter>헤더 파일\Diagramclass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

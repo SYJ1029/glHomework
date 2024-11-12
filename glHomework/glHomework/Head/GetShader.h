@@ -3,6 +3,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "2DDiagram.h"
+#include "LineDiagram.h"
 #include <fstream>
 #include <sstream>
 
@@ -31,24 +32,6 @@ GLchar* fragmentSource;
 int index[1000];
 
 
-GLfloat triShape[3][3] = {
- { -0.5, -0.5, 0.0 }, { 0.0, -0.5, 0.0 }, { -0.25, 0.5, 0.0} };
-
-float triShape2[] = {
-	0.5f,  0.5f, 0.0f,  // 우측 상단
-	0.5f, -0.5f, 0.0f,  
-	-0.5f, -0.5f, 0.0f,
-	-0.5f,  0.5f, 0.0f   // 좌측 상단
-};
-
-GLfloat triShape3[3][3] = {
- { 0.5, -0.5, 0.0 }, { 1.0, -0.5, 0.0 }, { 0.75, 0.5, 0.0} };
-
-GLfloat alltriShape[6][3] = {
-{ -0.5, -0.5, 0.0 }, { 0.0, -0.5, 0.0 }, { -0.25, 0.5, 0.0},
-{ 0.0, -0.5, 0.0 }, { 0.5, -0.5, 0.0 }, { 0.25, 0.5, 0.0}
-
-};
 
 
 const GLfloat colors[3][3] = {
@@ -167,17 +150,17 @@ GLvoid InitBuffer() {
 
 
 
-GLvoid UpdateBuffer() {
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-
-	//glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), NULL, GL_DYNAMIC_DRAW);
-
-	glBufferSubData(GL_ARRAY_BUFFER, 0, 18 * sizeof(GLfloat), alltriShape);
-	//glDrawArrays(GL_TRIANGLES, 0, 3);
-
-	//glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), 9 * sizeof(GLfloat), triShape2);
-	//glDrawArrays(GL_TRIANGLES, 3, 3);
-
-
-	glEnableVertexAttribArray(0);
-}
+//GLvoid UpdateBuffer() {
+//	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+//
+//	//glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), NULL, GL_DYNAMIC_DRAW);
+//
+//	glBufferSubData(GL_ARRAY_BUFFER, 0, 18 * sizeof(GLfloat), alltriShape);
+//	//glDrawArrays(GL_TRIANGLES, 0, 3);
+//
+//	//glBufferSubData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), 9 * sizeof(GLfloat), triShape2);
+//	//glDrawArrays(GL_TRIANGLES, 3, 3);
+//
+//
+//	glEnableVertexAttribArray(0);
+//}
