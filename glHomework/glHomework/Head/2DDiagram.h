@@ -1,7 +1,9 @@
 #pragma once
 
 
-#include "DiaBaseHeader.h"
+#include "TimerProcedure.h"
+#include "ProjMethod.h"
+#include "CheckPointQue.h"
 
 #define POINT 0
 
@@ -447,4 +449,13 @@ public:
 
 		return p;
 	}
+};
+
+
+
+
+class GL_Line {
+
+
+
 };
