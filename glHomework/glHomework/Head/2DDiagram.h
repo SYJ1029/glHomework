@@ -24,6 +24,8 @@ public:
 	GLfloat gravity;
 	bool ccw;
 
+
+	GLfloat col[3];
 	QuadSetting qset;
 
 
@@ -39,6 +41,10 @@ public:
 		axis = glm::vec3(0.0f, 1.0f, 0.0f);
 		OrbitAxis = glm::vec3(0.0f, 1.0f, 0.0f);
 		delta = { 0, 0, 0 };
+
+		for (int i = 0; i < 3; i++) {
+			col[i] = 0.0f;
+		}
 
 		indexcnt = 0;
 
@@ -95,8 +101,10 @@ public:
 		indexcnt = 0;
 	}
 
-	void Setcol(MyObjCol col[]) {
-
+	void Setcol(MyObjCol col) {
+		this->col[0] = col.R;
+		this->col[1] = col.G;
+		this->col[2] = col.B;
 	}
 
 	void SetPos() {
