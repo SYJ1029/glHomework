@@ -119,3 +119,5 @@ typedef struct GL_Rect {
 	GLPos pos2;
 }GL_Rect;
 
+
+
