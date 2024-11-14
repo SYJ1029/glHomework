@@ -93,7 +93,7 @@ GLPos WintoGL(int x, int y, int w, int h, Camera& camera) {
 GLvoid SetCamera() {
 	delete camera;
 
-	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void DepthCheck() {
@@ -704,7 +704,7 @@ GLvoid MyGen(int value) {
 
 	SetNewplayground(value);
 
-	glutTimerFunc(10, MyMove, value);
+	glutTimerFunc(1, MyMove, value);
 	glutTimerFunc(1000, MyGen, (value + 1) % 3);
 }
 
