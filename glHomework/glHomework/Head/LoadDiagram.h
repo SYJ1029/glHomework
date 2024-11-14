@@ -33,25 +33,22 @@ GLvoid InitDiagram() {
 		tri[i] = new GL_Tri();
 		rect[i] = new Rect();
 		pent[i] = new Pentagon();
-		//tri[i]->SetTranPos(200);
-		//rect[i]->SetTranPos(200);
-		//pent[i]->SetTranPos(200);
 	}
 }
 
 GLvoid SetGraph(int index) {
 
-	playground[index].center += {0, ((float)((float)rand() / RAND_MAX) * 600) - 400.0f, 0.0f};
+	playground[index].center += {0, ((float)((float)rand() / RAND_MAX) * 0.4f - 0.2f), 0.0f};
 
-	playground[index].speed = { -20.0f, 15.0f, 0.0f };
-	playground[index].gravity = 0.2f;
+	playground[index].speed = { -0.025f, 0.025f, 0.0f };
+	playground[index].gravity = 0.0005f;
 }
 
 GLvoid Setplayground() {
 
 	for (int i = 0; i < 3; i++) {
 
-		playground[i].center = { 1143 + 200.0f, 0.0f, 0.0f };
+		playground[i].center = { 1.5f, 0.0f, 0.0f };
 
 		playground[i].radian = { 0.0f, 0.0f, 0.0f };
 
@@ -68,7 +65,7 @@ GLvoid Setplayground() {
 }
 
 GLvoid SetNewplayground(int i) {
-	playground[i].center = { 1143 + 200.0f, 0.0f, 0.0f };
+	playground[i].center = { 1.5f, 0.0f, 0.0f };
 
 	playground[i].radian = { 0.0f, 0.0f, 0.0f };
 
@@ -85,7 +82,7 @@ GLvoid MyMove(int value) {
 	playground[value].center += playground[value].speed;
 
 
-	if (playground[value].center.x <= -1300 || playground[value].center.y <= -1300) {
+	if (playground[value].center.x <= -1.0 || playground[value].center.y <= -1.0) {
 		SetNewplayground(value);
 	}
 	else

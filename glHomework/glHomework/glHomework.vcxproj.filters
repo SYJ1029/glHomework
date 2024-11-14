@@ -80,6 +80,9 @@
     <ClInclude Include="Head\LoadDiagram.h">
       <Filter>헤더 파일\Diagramclass</Filter>
     </ClInclude>
+    <ClInclude Include="Head\CheckCollision.h">
+      <Filter>헤더 파일\Diagramclass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Shader\fragment.txt">
