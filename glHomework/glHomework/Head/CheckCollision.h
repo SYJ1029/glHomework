@@ -60,17 +60,19 @@ GLPos GetMin(GLPos pos1, GLPos pos2) {
 }
 
 
-GLPos GetDot(GL_Rect line, float cnt) {
+GLPos GetDot(GL_Rect line, float cnt, float delta) {
 	GLPos result = { 0.0f };
 	GLPos middlepos = { 0.0f, 0.0f, 0.0f };
-	GLPos prevpos = { 1.0f, 1.0f, 1.0f };
+	GLPos prevpos = { 2.0f, 1.0f, 1.0f };
 
-	float xradius = line.pos2.x - line.pos2.x;
+	float xradius = line.pos2.x - line.pos1.x;
 	float yradius = line.pos2.y - line.pos1.y;
 
 	int judge[2] = { 0, 0 };
 
-	for (float t = 0.0f; t < 1.0f; t += 0.01f) {
+
+	prevpos = line.pos1;
+	for (float t = delta; t <= 1.0f; t += delta) {
 		middlepos = { line.pos1.x + xradius * t, line.pos1.y + yradius * t, 0.0f};
 
 		judge[0] = CompareyPos(cnt, middlepos.y);
@@ -79,27 +81,30 @@ GLPos GetDot(GL_Rect line, float cnt) {
 
 		if (judge[0] != judge[1]) {
 			result = (middlepos - prevpos) / 2 + prevpos;
-			return result;
+
+			if (delta < 0.02)
+				return result;
+			else
+				return GetDot({ prevpos, middlepos }, cnt, delta / 2);
 		}
 
 		prevpos = middlepos;
 	}
 
 
-	return { -2.0f, -2.0f, -2.0f };
+	return GetDot(line, cnt, delta / 2);
 }
 
 GL_Rect GetCrossDots(GL_Rect line1, GL_Rect line2, float cnt) {
-	GL_Rect result = { {0.0f}, {0.0f} };
+
+	GLPos pos1 = GetDot(line1, cnt, 0.1);
+	GLPos pos2 = GetDot(line2, cnt, 0.1);
 
 
-	result.pos1 = GetDot(line1, cnt);
-	result.pos2 = GetDot(line2, cnt);
-
-	// 중간 검사 문항 넣기
 
 
-	return result;
+
+	return { pos1, pos2 };
 }
 
 
@@ -114,6 +119,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 	list<int> uplist;
 	list<int> bottomlist;
 	
+	int cnt;
 
 	for (int i = 0; i < 3; i++) {
 
@@ -202,14 +208,21 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 		if (uplist.empty() || bottomlist.empty());
 		else {
 
-			cout << i + 1 << "번째 " << playground[i].postype + 3 << "각형 교차합니다" << endl;
+			cout << i + 1 << "번째 " << playground[i].postype << "각형 교차합니다" << endl;
 
 			GL_Rect bline;
 			GL_Rect eline;
 			GL_Rect lineRect;
 
-			bline = { poses[uplist.back()], poses[bottomlist.front()]};
-			eline = { poses[bottomlist.back()], poses[uplist.front()] };
+			if ((uplist.front() == 0 && bottomlist.front() == 1) ||
+				bottomlist.front() == 0 && uplist.front() == 1) {
+				eline = { poses[uplist.back()], poses[bottomlist.back()] };
+				bline = { poses[bottomlist.front()], poses[uplist.front()] };
+			}
+			else {
+				eline = { poses[uplist.back()], poses[bottomlist.front()] };
+				bline = { poses[bottomlist.back()], poses[uplist.front()] };
+			}
 			
 			//if (bottomlist.front() == 0) {
 			//	lineRect = bline;
@@ -218,18 +231,208 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 			//}
 
+		
 
 			lineRect = GetCrossDots(bline, eline, line1.y);
 
-			cout << "(" << lineRect.pos1.x << ", " << lineRect.pos1.y << "), "
-				<< "(" << lineRect.pos2.x << ", " << lineRect.pos2.y << ")" << endl;
-			 
+			if (lineRect.pos1 > 1.0f || lineRect.pos1 < -1.0f || lineRect.pos2 > 1.0f || lineRect.pos2 < -1.0f) {
+				cout << "<<<<<somthing wrong>>>>>" << endl;
+			}
+			else {
+
+
+
+				if (lineRect.pos1.x > lineRect.pos2.x) {
+					token = lineRect.pos1;
+					lineRect.pos1 = lineRect.pos2;
+					lineRect.pos2 = token;
+				}
+
+				lineRect.pos1 = Spin(theta, lineRect.pos1, line2);
+				lineRect.pos2 = Spin(theta, lineRect.pos2, line2);
+
+				lineRect.pos1 -= playground[i].center;
+				lineRect.pos2 -= playground[i].center;
+
+				cout << "(" << lineRect.pos1.x << ", " << lineRect.pos1.y << "), "
+					<< "(" << lineRect.pos2.x << ", " << lineRect.pos2.y << ")" << endl;
+
+				GLPos* uppos;
+				GLPos* bottompos;
+				
+				switch (uplist.size() + 2) {
+				case ID_TRI:
+					cout << "3" << endl;
+					uppos = (GLPos*)malloc(3 * sizeof(GLPos));
+
+					for (cnt = 0; uplist.empty() == false; cnt++) {
+						uppos[cnt].x = tri[0]->pos[uplist.front()][0];
+						uppos[cnt].y = tri[0]->pos[uplist.front()][1];
+						uppos[cnt].z = tri[0]->pos[uplist.front()][2];
+
+						uplist.pop_front();
+					}
+
+					uppos[cnt] = lineRect.pos1;
+					uppos[cnt + 1] = lineRect.pos2;
+
+					slicedtri[tri_slicedcnt] = new GL_Tri(uppos);
+					slicedtri[tri_slicedcnt]->Setcol(tri[playground[i].indexcnt]->col);
+
+					slicedtri[tri_slicedcnt]->center = playground[i].center;
+
+
+					tri_slicedcnt++;
+
+					break;
+				case ID_RECT:
+					cout << "4" << endl;
+					uppos = (GLPos*)malloc(4 * sizeof(GLPos));
+
+					for (cnt = 0; uplist.empty() == false; cnt++) {
+						uppos[cnt].x = rect[0]->pos[uplist.front()][0];
+						uppos[cnt].y = rect[0]->pos[uplist.front()][1];
+						uppos[cnt].z = rect[0]->pos[uplist.front()][2];
+
+						uplist.pop_front();
+					}
+
+					uppos[cnt] = lineRect.pos1;
+					uppos[cnt + 1] = lineRect.pos2;
+
+					slicedrect[rect_slicedcnt] = new Rect(uppos);
+					slicedrect[rect_slicedcnt]->Setcol(rect[playground[i].indexcnt]->col);
+
+					slicedrect[rect_slicedcnt]->center = playground[i].center;
+
+					rect_slicedcnt++;
+					break;
+				case ID_PENTA:
+					cout << "5" << endl;
+					uppos = (GLPos*)malloc(5 * sizeof(GLPos));
+
+					for (cnt = 0; uplist.empty() == false; cnt++) {
+						uppos[cnt].x = pent[0]->pos[uplist.front()][0];
+						uppos[cnt].y = pent[0]->pos[uplist.front()][1];
+						uppos[cnt].z = pent[0]->pos[uplist.front()][2];
+
+						uplist.pop_front();
+					}
+
+					uppos[cnt] = lineRect.pos1;
+					uppos[cnt + 1] = lineRect.pos2;
+					
+
+					slicedpent[pent_slicedcnt] = new Pentagon(uppos);
+					slicedpent[pent_slicedcnt]->Setcol(pent[playground[i].indexcnt]->col);
+					
+					slicedpent[pent_slicedcnt]->center = playground[i].center;
+
+					pent_slicedcnt++;
+					break;
+				case ID_OCTA:
+					cout << "6" << endl;
+					uppos = (GLPos*)malloc(6 * sizeof(GLPos));
+
+
+					break;
+				default:					
+					cout << "<<< Strange ID >>>" << endl;
+					break;
+				}
+
+
+
+
+				switch (bottomlist.size() + 2) {
+				case ID_TRI:
+					cout << "3" << endl;
+					bottompos = (GLPos*)malloc(3 * sizeof(GLPos));
+
+					for (cnt = 0; bottomlist.empty() == false; cnt++) {
+						bottompos[cnt] = { tri[0]->pos[bottomlist.front()][0], tri[0]->pos[bottomlist.front()][1], tri[0]->pos[bottomlist.front()][2] };
+
+
+						bottomlist.pop_front();
+					}
+
+					bottompos[cnt] = lineRect.pos2;
+					bottompos[cnt + 1] = lineRect.pos1;
+
+					slicedtri[tri_slicedcnt] = new GL_Tri(bottompos);
+					slicedtri[tri_slicedcnt]->Setcol(tri[playground[i].indexcnt]->col);
+
+					slicedtri[tri_slicedcnt]->center = playground[i].center;
+
+
+					tri_slicedcnt++;
+
+					break;
+				case ID_RECT:
+					cout << "4" << endl;
+					bottompos = (GLPos*)malloc(4 * sizeof(GLPos));
+
+					for (cnt = 0; bottomlist.empty() == false; cnt++) {
+						bottompos[cnt] = { rect[0]->pos[bottomlist.front()][0], rect[0]->pos[bottomlist.front()][1], rect[0]->pos[bottomlist.front()][2] };
+
+
+						bottomlist.pop_front();
+					}
+
+					bottompos[cnt] = lineRect.pos2;
+					bottompos[cnt + 1] = lineRect.pos1;
+
+					slicedrect[rect_slicedcnt] = new Rect(bottompos);
+					slicedrect[rect_slicedcnt]->Setcol(rect[playground[i].indexcnt]->col);
+
+					slicedrect[rect_slicedcnt]->center = playground[i].center;
+
+					rect_slicedcnt++;
+					break;
+				case ID_PENTA:
+					cout << "5" << endl;
+					bottompos = (GLPos*)malloc(5 * sizeof(GLPos));
+
+					for (cnt = 0; bottomlist.empty() == false; cnt++) {
+						bottompos[cnt] = { pent[0]->pos[bottomlist.front()][0], pent[0]->pos[bottomlist.front()][1], pent[0]->pos[bottomlist.front()][2] };
+
+						bottomlist.pop_front();
+					}
+
+					bottompos[cnt] = lineRect.pos2;
+					bottompos[cnt + 1] = lineRect.pos1;
+
+
+					slicedpent[pent_slicedcnt] = new Pentagon(bottompos);
+					slicedpent[pent_slicedcnt]->Setcol(pent[playground[i].indexcnt]->col);
+
+					slicedpent[pent_slicedcnt]->center = playground[i].center;
+
+					pent_slicedcnt++;
+					break;
+				case ID_OCTA:
+					cout << "6" << endl;
+					bottompos = (GLPos*)malloc(6 * sizeof(GLPos));
+
+
+					break;
+				default:
+					cout << "<<< Strange ID >>>" << endl;
+					break;
+
+					free(uppos);
+					free(bottompos);
+				}
+
+
+				playground[i].center = { -1.5f, -1.5f, 0.0f };
+			}
 		}
 
 
 		uplist.clear();
 		bottomlist.clear();
-
+		
 	}
 
 }

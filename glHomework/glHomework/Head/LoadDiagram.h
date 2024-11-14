@@ -6,11 +6,12 @@
 
 #define MAX_INDEX 12
 #define MAX_PERDIAGRAM 3
+#define MAX_SLICE 300
 
-#define ID_TRI 0
-#define ID_RECT 1
-#define ID_PENTA 2
-#define ID_OCTA 3
+#define ID_TRI 3
+#define ID_RECT 4
+#define ID_PENTA 5
+#define ID_OCTA 6
 
 #define PROJED true
 
@@ -24,9 +25,20 @@ GL_Line* line = new GL_Line();
 GLUquadricObj* qobj = gluNewQuadric();
 
 
-
-
 Diagram playground[3];
+
+
+
+
+
+GL_Tri** slicedtri = (GL_Tri**)malloc(MAX_SLICE * sizeof(GL_Tri*));
+Rect** slicedrect = (Rect**)malloc(MAX_SLICE * sizeof(Rect*));
+Pentagon** slicedpent = (Pentagon**)malloc(MAX_SLICE * sizeof(Pentagon*));
+
+int tri_slicedcnt = 0;
+int rect_slicedcnt = 0;
+int pent_slicedcnt = 0;
+
 
 GLvoid InitDiagram() {
 	for (int i = 0; i < MAX_PERDIAGRAM; i++) {
@@ -69,11 +81,11 @@ GLvoid SetNewplayground(int i) {
 
 	playground[i].radian = { 0.0f, 0.0f, 0.0f };
 
-	playground[i].indexcnt = (int)((float)rand() / RAND_MAX + 0.5f);
+	playground[i].indexcnt = (int)((float)rand() / RAND_MAX +0.5f) ;
 
 	SetGraph(i);
 
-	playground[i].postype = ((float)((float)rand() / RAND_MAX) * 2) + 0.5;
+	playground[i].postype = ((float)((float)rand() / RAND_MAX) * 2) + 3.5f;
 }
 
 GLvoid MyMove(int value) {
