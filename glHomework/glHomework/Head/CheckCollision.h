@@ -83,10 +83,9 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 				token = { tri[0]->pos[j][0], tri[0]->pos[j][1], tri[0]->pos[j][2] };
 
 
-
+				poses[j] *= tri[0]->Stretch;
 				poses[j] = Spin(-1 * theta, token, Opos);
 				linetoken = line1 + playground[i].center;
-				poses[j] *= tri[0]->Stretch;
 
 				//if (poses[j].x <= GetMax(line1, line2).x && poses[j].x >= GetMin(line1, line2).x);
 				//else continue;
