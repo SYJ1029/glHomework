@@ -40,8 +40,8 @@ GLvoid SetGraph(int index) {
 
 	playground[index].center += {0, ((float)((float)rand() / RAND_MAX) * 0.4f - 0.2f), 0.0f};
 
-	playground[index].speed = { -0.025f, 0.025f, 0.0f };
-	playground[index].gravity = 0.0005f;
+	playground[index].speed = { -0.012f, 0.01f, 0.0f };
+	playground[index].gravity = 0.0001f;
 }
 
 GLvoid Setplayground() {

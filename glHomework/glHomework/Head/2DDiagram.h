@@ -158,16 +158,20 @@ public:
 
 
 	GL_Tri() : Diagram(){
-		this->pos[0][0] = 0.0f,this->pos[0][1] =  0.5f * glm::sqrt(3.0f), this->pos[0][2] = 0.0f;
-		this->pos[1][0] = -0.5f, this->pos[1][1] =  -0.5f, this->pos[1][2] = 0.0f;
-		this->pos[2][0] = 0.5f, this->pos[2][1] =  -0.5f, this->pos[2][2] =  0.0f;
+		float r = glm::sqrt(3.0f) / 3.0f;
+
+
+		this->pos[0][0] = 0.0f,this->pos[0][1] = r, this->pos[0][2] = 0.0f;
+		this->pos[1][0] = -0.5f, this->pos[1][1] =  -0.288f, this->pos[1][2] = 0.0f;
+		this->pos[2][0] = 0.5f, this->pos[2][1] =  -0.288f, this->pos[2][2] =  0.0f;
 
 		this->center = { 0.0f, 0.0f, 0.0f };
 		this->radian = { 0.0f, 0.0f, 0.0f };
-		this->Stretch = { 0.2f, 0.2f, 0.2f };
+		this->Stretch = { 1.0f, 1.0f, 1.0f };
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				this->col[i][j] = 0.0f;
+				this->pos[i][j] *= 0.2f;
 			}
 		}
 
@@ -270,11 +274,12 @@ public:
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 3; j++) {
 				this->col[i][j] = 0.0f;
+				this->pos[i][j] *= 0.2f;
 			}
 		}
 
 
-		Stretch = { 0.2f, 0.2f, 0.2f };
+		Stretch = { 1.0f, 1.0f, 1.0f };
 		mulcount = 1;
 		start_index = 0;
 	}
@@ -365,22 +370,23 @@ public:
 	int start_index;
 
 	Pentagon() : Diagram() {
-		this->pos[0][0] = -0.5f, this->pos[0][1] = -0.5f, this->pos[0][2] = 0.0f;
-		this->pos[1][0] = 0.5f, this->pos[1][1] = -0.5f, this->pos[1][2] = 0.0f;
-		this->pos[2][0] = 0.5f, this->pos[2][1] = 0.375f, this->pos[2][2] = 0.0f;
-		this->pos[3][0] = 0.0f, this->pos[3][1] = 0.75f, this->pos[3][2] = 0.0f;
-		this->pos[4][0] = -0.5f, this->pos[4][1] = 0.375f, this->pos[4][2] = 0.0f;
+		this->pos[0][0] = -0.5f, this->pos[0][1] = -0.6882f, this->pos[0][2] = 0.0f;
+		this->pos[1][0] = 0.5f, this->pos[1][1] = -0.6882f, this->pos[1][2] = 0.0f;
+		this->pos[2][0] = 0.809f, this->pos[2][1] = 0.2629f, this->pos[2][2] = 0.0f;
+		this->pos[3][0] = -0.0f, this->pos[3][1] = 0.8507f, this->pos[3][2] = 0.0f;
+		this->pos[4][0] = -0.809f, this->pos[4][1] = 0.2629f, this->pos[4][2] = 0.0f;
 
 
 		this->center = { 0.0f, 0.0f, 0.0f };
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 3; j++) {
 				this->col[i][j] = 0.0f;
+				this->pos[i][j] *= 0.2f;
 			}
 		}
 
 
-		Stretch = { 0.2f, 0.2f, 0.2f };
+		Stretch = { 1.0f, 1.0f, 1.0f };
 		mulcount = 1;
 		start_index = 0;
 	}

@@ -6,11 +6,11 @@
 
 
 
-int CompareyPos(GLfloat y, GLPos pos) {
+int CompareyPos(GLfloat y, GLfloat y2) {
 
-	if (pos.y > y) return 1;
-	if (pos.y == y) return 0;
-	if (pos.y < y) return -1;
+	if (y2 > y) return 1;
+	if (y2 == y) return 0;
+	if (y2 < y) return -1;
 
 	
 	return INFINITY;
@@ -67,8 +67,14 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 	GLPos Opos = { 0.0f, 0.0f, 0.0f };
 	int upordown[5];
 
-	list<GLPos> uplist;
-	list<GLPos> bottomlist;
+	list<int> uplist;
+	list<int> bottomlist;
+
+	auto upit = uplist.begin();
+	auto bottomit = bottomlist.begin();
+
+	int count = 0;
+	int index = 0;
 
 	for (int i = 0; i < 3; i++) {
 
@@ -80,12 +86,12 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 
 			for (int j = 0; j < 3; j++) {
-				token = { tri[0]->pos[j][0], tri[0]->pos[j][1], tri[0]->pos[j][2] };
+				poses[j] = {tri[0]->pos[j][0], tri[0]->pos[j][1], tri[0]->pos[j][2]};
 
 
 				poses[j] *= tri[0]->Stretch;
-				poses[j] = Spin(-1 * theta, token, Opos);
-				linetoken = line1 + playground[i].center;
+				poses[j] = Spin(-1 * theta, poses[j], Opos);
+				poses[j] += playground[i].center;
 
 				//if (poses[j].x <= GetMax(line1, line2).x && poses[j].x >= GetMin(line1, line2).x);
 				//else continue;
@@ -93,12 +99,12 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 
 
-				upordown[j] = CompareyPos(linetoken.y, poses[j]);
+				upordown[j] = CompareyPos(line1.y, poses[j].y);
 
 				if (upordown[j] < 0)
-					uplist.push_back(poses[j]);
+					uplist.push_back(j);
 				if (upordown[j] > 0)
-					bottomlist.push_back(poses[j]);
+					bottomlist.push_back(j);
 
 
 			
@@ -108,21 +114,20 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 			break;
 		case ID_RECT:
 			for (int j = 0; j < 4; j++) {
-				token = { rect[0]->pos[j][0], rect[0]->pos[j][1], rect[0]->pos[j][2] };
-				poses[j] = Spin(-1 * theta, token, Opos);
-				linetoken = line1 + playground[i].center;
-				poses[j] *= rect[0]->Stretch;
+				poses[j] = {rect[0]->pos[j][0], rect[0]->pos[j][1], rect[0]->pos[j][2]};
+				poses[j] = Spin(-1 * theta, poses[j], Opos);
+				poses[j] += playground[i].center;
 
 
 				//if (poses[j].x > GetMax(line1, line2).x || poses[j].x < GetMin(line1, line2).x)
 				//	break;
 
-				upordown[j] = CompareyPos(linetoken.y, poses[j]);
+				upordown[j] = CompareyPos(line1.y, poses[j].y);
 
 				if (upordown[j] > 0)
-					uplist.push_back(poses[j]);
+					uplist.push_back(j);
 				if (upordown[j] < 0)
-					bottomlist.push_back(poses[j]);
+					bottomlist.push_back(j);
 
 
 
@@ -130,21 +135,20 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 			break;
 		case ID_PENTA:
 			for (int j = 0; j < 5; j++) {
-				token = { pent[0]->pos[i][0], pent[0]->pos[i][1], pent[0]->pos[i][2] };
-				poses[j] = Spin(-1 * theta, token, Opos);
-				linetoken = line1 + playground[i].center;
+				poses[j] = {pent[0]->pos[j][0], pent[0]->pos[j][1], pent[0]->pos[j][2]};
 				poses[j] *= pent[0]->Stretch;
+				poses[j] = Spin(-1 * theta, poses[j], Opos);
+				poses[j] += playground[i].center;
 
 				//if (poses[j].x > GetMax(line1, line2).x || poses[j].x < GetMin(line1, line2).x)
 				//	break;
 
-				upordown[i] = CompareyPos(linetoken.y, poses[i]);
+				upordown[j] = CompareyPos(line1.y, poses[j].y);
 
-				if (upordown[i] > 0)
-					uplist.push_back(poses[i]);
-				else if (upordown[i] < 0)
-					bottomlist.push_back(poses[i]);
-
+				if (upordown[j] > 0)
+					uplist.push_back(j);
+				else if (upordown[j] < 0)
+					bottomlist.push_back(j);
 
 
 			}
@@ -155,7 +159,38 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 		if (uplist.empty() || bottomlist.empty());
 		else {
-			cout << i+1 << "번째 " << playground[i].postype + 3 << "각형 교차합니다" << endl;
+
+			if(playground[i].center.x >= -1.0f && playground[i].center.x <= 1.0f &&
+				playground[i].center.y >= -1.0f && playground[i].center.y <= 1.0f)
+				cout << i+1 << "번째 " << playground[i].postype + 3 << "각형 교차합니다" << endl;
+
+			
+			upit = uplist.begin();
+			bottomit = bottomlist.begin();
+
+			for (upit = uplist.begin(); *upit != uplist.size() && *bottomit != bottomlist.size(); count++) {
+
+				if (*upit == count) {
+					if (*(++bottomit) == count + 1) {
+						cout << "교차점1" << endl;
+					}
+					
+					++upit;
+				}
+
+				else if (*bottomit == count) {
+					if (*(++upit) == count + 1) {
+						cout << "교차점2" << endl;
+					}
+
+					++bottomit;
+				}
+
+
+			}
+			
+
+			count = 0;
 		}
 
 
