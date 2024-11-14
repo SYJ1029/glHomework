@@ -158,20 +158,20 @@ public:
 
 
 	GL_Tri() : Diagram(){
-		this->pos[0][0] = 0.0f,this->pos[0][1] =  50.0f * glm::sqrt(3.0f), this->pos[0][2] = 0.0f;
-		this->pos[1][0] = -100.0f, this->pos[1][1] =  -100.0f, this->pos[1][2] = 0.0f;
-		this->pos[2][0] = 100.0f, this->pos[2][1] =  -100.0f, this->pos[2][2] =  0.0f;
+		this->pos[0][0] = 0.0f,this->pos[0][1] =  0.5f * glm::sqrt(3.0f), this->pos[0][2] = 0.0f;
+		this->pos[1][0] = -0.5f, this->pos[1][1] =  -0.5f, this->pos[1][2] = 0.0f;
+		this->pos[2][0] = 0.5f, this->pos[2][1] =  -0.5f, this->pos[2][2] =  0.0f;
 
 		this->center = { 0.0f, 0.0f, 0.0f };
 		this->radian = { 0.0f, 0.0f, 0.0f };
-		this->Stretch = { 1.0f, 1.0f, 1.0f };
+		this->Stretch = { 0.2f, 0.2f, 0.2f };
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				this->col[i][j] = 0.0f;
 			}
 		}
 
-		mulcount = 200;
+		mulcount = 1;
 		start_index = 0;
 	}
 
@@ -260,10 +260,10 @@ public:
 
 
 	Rect() : Diagram(){		
-		this->pos[0][0] = -100.0f, this->pos[0][1] =  - 100.0f, this->pos[0][2] = 0.0f;
-		this->pos[1][0] = 100.0f, this->pos[1][1] =  - 100.0f, this->pos[1][2] =  0.0f;
-		this->pos[2][0] = 100.0f, this->pos[2][1] = 100.0f, this->pos[2][2] =  0.0f;
-		this->pos[3][0] = -100.0f, this->pos[3][1] = 100.0f, this->pos[3][2] =  0.0f;
+		this->pos[0][0] = -0.5f, this->pos[0][1] =  -0.5f, this->pos[0][2] = 0.0f;
+		this->pos[1][0] = 0.5f, this->pos[1][1] =  -0.5f, this->pos[1][2] =  0.0f;
+		this->pos[2][0] = 0.5f, this->pos[2][1] = 0.5f, this->pos[2][2] =  0.0f;
+		this->pos[3][0] = -0.5f, this->pos[3][1] = 0.5f, this->pos[3][2] =  0.0f;
 
 
 		this->center = { 0.0f, 0.0f, 0.0f };
@@ -274,8 +274,8 @@ public:
 		}
 
 
-		Stretch = 1.0f;
-		mulcount = 200;
+		Stretch = { 0.2f, 0.2f, 0.2f };
+		mulcount = 1;
 		start_index = 0;
 	}
 
@@ -329,7 +329,9 @@ public:
 	glm::mat4 GetWorldTransMatrix() {
 		glm::mat4 result = glm::mat4(1.0f);
 
-		result *= InitMoveProj(center / mulcount);
+		result *= InitMoveProj(center);
+		result *= InitRotateProj(radian, center);
+		result *= ChangeScale(Stretch, center);
 
 		return result;
 	}
@@ -363,11 +365,11 @@ public:
 	int start_index;
 
 	Pentagon() : Diagram() {
-		this->pos[0][0] = -100.0f, this->pos[0][1] = -100.0f, this->pos[0][2] = 0.0f;
-		this->pos[1][0] = 100.0f, this->pos[1][1] = -100.0f, this->pos[1][2] = 0.0f;
-		this->pos[2][0] = 100.0f, this->pos[2][1] = 75.0f, this->pos[2][2] = 0.0f;
-		this->pos[3][0] = 0.0f, this->pos[3][1] = 150.0f, this->pos[3][2] = 0.0f;
-		this->pos[4][0] = -100.0f, this->pos[4][1] = 75.0f, this->pos[4][2] = 0.0f;
+		this->pos[0][0] = -0.5f, this->pos[0][1] = -0.5f, this->pos[0][2] = 0.0f;
+		this->pos[1][0] = 0.5f, this->pos[1][1] = -0.5f, this->pos[1][2] = 0.0f;
+		this->pos[2][0] = 0.5f, this->pos[2][1] = 0.375f, this->pos[2][2] = 0.0f;
+		this->pos[3][0] = 0.0f, this->pos[3][1] = 0.75f, this->pos[3][2] = 0.0f;
+		this->pos[4][0] = -0.5f, this->pos[4][1] = 0.375f, this->pos[4][2] = 0.0f;
 
 
 		this->center = { 0.0f, 0.0f, 0.0f };
@@ -378,8 +380,8 @@ public:
 		}
 
 
-		Stretch = 1.0f;
-		mulcount = 200;
+		Stretch = { 0.2f, 0.2f, 0.2f };
+		mulcount = 1;
 		start_index = 0;
 	}
 
@@ -433,7 +435,9 @@ public:
 	glm::mat4 GetWorldTransMatrix() {
 		glm::mat4 result = glm::mat4(1.0f);
 
-		result *= InitMoveProj(center / mulcount);
+		result *= InitMoveProj(center);
+		result *= InitRotateProj(radian, center);
+		result *= ChangeScale(Stretch, center);
 
 		return result;
 	}

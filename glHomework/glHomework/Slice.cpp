@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Head/LoadDiagram.h"
+#include "Head/CheckCollision.h"
 
 Camera* camera;
-Projection* proj;
 
 
 
@@ -51,7 +50,7 @@ int mulcount = 1;
 
 
 
-GLPos WintoGL(int x, int y, int w, int h, Camera& camera, Projection& proj) {
+GLPos WintoGL(int x, int y, int w, int h, Camera& camera) {
 	GLPos newpos;
 
 
@@ -74,7 +73,6 @@ GLPos WintoGL(int x, int y, int w, int h, Camera& camera, Projection& proj) {
 	glm::vec4 newtoken = glm::vec4(token, 1.0f);
 	glm::mat4 newview = glm::inverse(camera.GetViewMatix());
 
-	model = glm::inverse(proj.GetProjMatrix());
 	newview *= model;
 	newtoken = newview * newtoken;
 	newtoken /= newtoken.w;
@@ -95,22 +93,7 @@ GLPos WintoGL(int x, int y, int w, int h, Camera& camera, Projection& proj) {
 GLvoid SetCamera() {
 	delete camera;
 
-	camera = new Camera(glm::vec3(0.0f, 0.0f, 3000.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-}
-
-GLvoid SetProjection(int projtype) {
-	delete proj;
-
-	proj = new Projection();
-
-	if (projtype == PROJ_ORTHO) {
-		proj->InitOrtho(-5.0f, 5.0f, 5.0f, -5.0f, -30.0f, 15.0f);
-	}
-	else {
-		proj->InitPerspective(glm::radians(45.0f), 1.0f, 2000.0f, 4000.0f);
-	}
-
-	IsobjsProjed(false);
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.5f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void DepthCheck() {
@@ -386,7 +369,6 @@ void main(int argc, char** argv) { //--- 윈도우 출력하고 콜백함수 설정 { //--- �
 	SetBuffer();
 	Setplayground();
 	SetCamera();
-	SetProjection(PROJ_PERSPECTIVE);
 
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -442,6 +424,8 @@ void drawScene()
 	/*model = glm::translate(model, glm::vec3(0.1f, 0.5f, 0.0f));*/
 	int modelLocation = glGetUniformLocation(shaderProgramID, "modelTransform");
 
+
+
 	glBindVertexArray(vao);
 
 	SetBuffer();
@@ -461,10 +445,6 @@ void drawScene()
 
 
 
-		glm::mat4 projection = glm::mat4(1.0);
-		projection = proj->GetProjMatrix();
-		unsigned int projectionLocation = glGetUniformLocation(shaderProgramID, "projectionTransform");
-		glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &projection[0][0]);
 
 
 		glm::mat4 view = glm::mat4(1.0);
@@ -565,7 +545,7 @@ GLvoid Mouse(int button, int state, int x, int y) {
 	MyObjCol coltoken[3] = { SetRandObjCol(), SetRandObjCol(), SetRandObjCol() };
 
 	if (state == GLUT_DOWN) {
-		newpos = WintoGL(x, y, Screensize.x, Screensize.y, *camera, *proj);
+		newpos = WintoGL(x, y, Screensize.x, Screensize.y, *camera);
 		switch (button) {
 		case GLUT_LEFT_BUTTON:
 			line->InitFirstPos(newpos);
@@ -582,13 +562,15 @@ GLvoid Mouse(int button, int state, int x, int y) {
 	else {
 
 		line->EndSetPos();
+
+		CheckCollision();
 	}
 
 	glutPostRedisplay();
 }
 
 GLvoid MouseMove(int x, int y) {
-	GLPos newpos = WintoGL(x, y, Screensize.x, Screensize.y, *camera, *proj);
+	GLPos newpos = WintoGL(x, y, Screensize.x, Screensize.y, *camera);
 
 	line->UpdateEndPos(newpos);
 

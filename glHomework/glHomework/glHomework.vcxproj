@@ -28,6 +28,7 @@
     <ClInclude Include="Head\2DDiagram.h" />
     <ClInclude Include="Head\3DDiagram.h" />
     <ClInclude Include="Head\BaseHeader.h" />
+    <ClInclude Include="Head\CheckCollision.h" />
     <ClInclude Include="Head\CheckPointQue.h" />
     <ClInclude Include="Head\ColorStructs.h" />
     <ClInclude Include="Head\GetShader.h" />
