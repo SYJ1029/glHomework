@@ -160,13 +160,80 @@ void Setindex() {
 	}
 
 
+
+
+
 	line->start_index = index_count;
 
 	for (index_count; index_count < present_bit + 2; index_count++, index_array_count++) {
 		index[index_count] = indextoken + index_array_count;
+
+		cnt++;
 	}
 
 	indextoken += 2;
+
+	present_bit = index_count;
+	begin = cnt;
+
+
+	int** sp1 = (int**)malloc(tri_slicedcnt * sizeof(int*));
+	int** sp2 = (int**)malloc(rect_slicedcnt * sizeof(int*));
+	int** sp3 = (int**)malloc(pent_slicedcnt * sizeof(int*));
+
+	for (int i = 0; i < tri_slicedcnt; i++) {
+		slicedtri[i]->start_index = index_count;
+		sp1[i] = slicedtri[i]->AddIndexList();
+
+
+		for (index_count; index_count < present_bit + 3; index_count++) {
+			index[index_count] = indextoken + sp1[i][index_count - begin];
+
+			cnt++;
+		}
+
+
+		present_bit = index_count;
+
+		indextoken += 3;
+		begin = cnt;
+	}
+
+	for (int i = 0; i < rect_slicedcnt; i++) {
+		slicedrect[i]->start_index = index_count;
+		sp2[i] = slicedrect[i]->AddIndexList();
+
+
+		for (index_count; index_count < present_bit + 6; index_count++) {
+			index[index_count] = indextoken + sp2[i][index_count - begin];
+
+			cnt++;
+		}
+
+
+		present_bit = index_count;
+
+		indextoken += 4;
+		begin = cnt;
+	}
+
+	for (int i = 0; i < pent_slicedcnt; i++) {
+		slicedpent[i]->start_index = index_count;
+		sp3[i] = slicedpent[i]->AddIndexList();
+
+
+		for (index_count; index_count < present_bit + 9; index_count++) {
+			index[index_count] = indextoken + sp3[i][index_count - begin];
+
+			cnt++;
+		}
+
+
+		present_bit = index_count;
+
+		indextoken += 5;
+		begin = cnt;
+	}
 
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -175,7 +242,9 @@ void Setindex() {
 	free(p1);
 	free(p2);
 	free(p3);
-
+	free(sp1);
+	free(sp2);
+	free(sp3);
 
 }
 
@@ -267,6 +336,8 @@ GLvoid SetBuffer() {
 
 	}
 
+
+
 	for (int i = 0; i < 2; i++) {
 		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
 			3 * sizeof(GLfloat), line->pos[i]);
@@ -274,6 +345,34 @@ GLvoid SetBuffer() {
 		(*counter) += 3 * sizeof(GLfloat);
 	}
 
+
+
+	for (int i = 0; i < tri_slicedcnt; i++) {
+		for (int j = 0; j < 3; j++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), slicedtri[i]->pos[j]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
+	}
+
+	for (int i = 0; i < rect_slicedcnt; i++) {
+		for (int j = 0; j < 4; j++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), slicedrect[i]->pos[j]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
+	}
+
+	for (int i = 0; i < pent_slicedcnt; i++) {
+		for (int j = 0; j < 5; j++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), slicedpent[i]->pos[j]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
+	}
 	index_count = 0;
 	index_array_count = 0;
 
@@ -316,11 +415,40 @@ GLvoid SetBuffer() {
 		}
 	}
 
+
+
 	for (int i = 0; i < 2; i++) {
 		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
 			3 * sizeof(GLfloat), line->col[i]);
 
 		(*counter) += 3 * sizeof(GLfloat);
+	}
+
+	for (int i = 0; i < tri_slicedcnt; i++) {
+		for (int j = 0; j < 3; j++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), slicedtri[i]->col[j]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
+	}
+
+	for (int i = 0; i < rect_slicedcnt; i++) {
+		for (int j = 0; j < 4; j++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), slicedrect[i]->col[j]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
+	}
+
+	for (int i = 0; i < pent_slicedcnt; i++) {
+		for (int j = 0; j < 5; j++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), slicedpent[i]->col[j]);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
 	}
 
 	//for (int i = 0; i < 6; i++) {
@@ -508,6 +636,7 @@ void drawScene()
 
 
 
+
 	if (line->draw) {
 		counter = line->start_index;
 		submodel = glm::mat4(1.0f);
@@ -516,6 +645,35 @@ void drawScene()
 	}
 
 
+	model = glm::mat4(1.0f);
+
+	for (int i = 0; i < tri_slicedcnt; i++) {
+		counter = slicedtri[i]->start_index;
+		submodel = model;
+
+		submodel *= slicedtri[i]->GetWorldTransMatrix();
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
+
+		glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
+	}
+
+	for (int i = 0; i < rect_slicedcnt; i++) {
+		counter = slicedrect[i]->start_index;
+		submodel = model;
+
+		submodel *= slicedrect[i]->GetWorldTransMatrix();
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
+
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
+	}
+
+	for (int i = 0; i < pent_slicedcnt; i++) {
+		counter = slicedpent[i]->start_index;
+		submodel = model;
+		submodel *= slicedpent[i]->GetWorldTransMatrix();
+		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
+		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
+	}
 
 	//model = basemat;
 

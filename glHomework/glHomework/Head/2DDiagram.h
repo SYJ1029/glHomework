@@ -179,6 +179,28 @@ public:
 		start_index = 0;
 	}
 
+	GL_Tri(GLPos* pos) : Diagram() {
+		for (int i = 0; i < 3; i++) {
+			this->pos[i][0] = pos[i].x;
+			this->pos[i][1] = pos[i].y;
+			this->pos[i][2] = pos[i].z;
+		}
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				this->col[i][j] = 0.0f;
+			}
+		}
+
+		this->center = { 0.0f, 0.0f, 0.0f };
+		this->radian = { 0.0f, 0.0f, 0.0f };
+		this->Stretch = { 1.0f, 1.0f, 1.0f };
+
+
+		mulcount = 1;
+		start_index = 0;
+	}
+
 	void Setcol(MyObjCol col[3]) {
 		for (int i = 0; i < 3; i++) {
 			this->col[i][0] = col[i].R;
@@ -186,6 +208,15 @@ public:
 			this->col[i][2] = col[i].B;
 		}
 	}
+
+	void Setcol(GLfloat col[3][3]) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				this->col[i][j] = col[i][j];
+			}
+		}
+	}
+
 
 	void SetTranPos(int mulcount) {
 		for (int i = 0; i < 3; i++) {
@@ -284,11 +315,38 @@ public:
 		start_index = 0;
 	}
 
+	Rect(GLPos* pos) : Diagram() {
+		for (int i = 0; i < 4; i++) {
+			this->pos[i][0] = pos[i].x;
+			this->pos[i][1] = pos[i].y;
+			this->pos[i][2] = pos[i].z;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 3; j++) {
+				this->col[i][j] = 0.0f;
+			}
+		}
+
+		this->center = { 0.0f, 0.0f, 0.0f };
+		Stretch = { 1.0f, 1.0f, 1.0f };
+		mulcount = 1;
+		start_index = 0;
+	}
+
 	void Setcol(MyObjCol col[4]) {
 		for (int i = 0; i < 4; i++) {
 			this->col[i][0] = col[i].R;
 			this->col[i][1] = col[i].G;
 			this->col[i][2] = col[i].B;
+		}
+	}
+
+	void Setcol(GLfloat col[4][3]) {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 3; j++) {
+				this->col[i][j] = col[i][j];
+			}
 		}
 	}
 
@@ -391,11 +449,38 @@ public:
 		start_index = 0;
 	}
 
+	Pentagon(GLPos* pos) : Diagram() {
+		for (int i = 0; i < 5; i++) {
+			this->pos[i][0] = pos[i].x;
+			this->pos[i][1] = pos[i].y;
+			this->pos[i][2] = pos[i].z;
+		}
+
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 3; j++) {
+				this->col[i][j] = 0.0f;
+			}
+		}
+
+		this->center = { 0.0f, 0.0f, 0.0f };
+		Stretch = { 1.0f, 1.0f, 1.0f };
+		mulcount = 1;
+		start_index = 0;
+	}
+
 	void Setcol(MyObjCol col[5]) {
 		for (int i = 0; i < 5; i++) {
 			this->col[i][0] = col[i].R;
 			this->col[i][1] = col[i].G;
 			this->col[i][2] = col[i].B;
+		}
+	}
+
+	void Setcol(GLfloat col[5][3]) {
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 3; j++) {
+				this->col[i][j] = col[i][j];
+			}
 		}
 	}
 
