@@ -39,6 +39,7 @@ int tri_slicedcnt = 0;
 int rect_slicedcnt = 0;
 int pent_slicedcnt = 0;
 
+int system_time = 10;
 
 GLvoid InitDiagram() {
 	for (int i = 0; i < MAX_PERDIAGRAM; i++) {
@@ -98,7 +99,7 @@ GLvoid MyMove(int value) {
 		SetNewplayground(value);
 	}
 	else
-		glutTimerFunc(10, MyMove, value);
+		glutTimerFunc(system_time, MyMove, value);
 	glutPostRedisplay();
 }
 
@@ -108,29 +109,49 @@ GLvoid IsobjsProjed(bool proj) {
 		tri[0]->SetTranPos(SIZEMAKRO);
 		rect[0]->SetTranPos(SIZEMAKRO);
 	}
-
+	
 }
 
 
 
 
 
-GLvoid MoveSliced(int value) {
-	for (int i = 0; i < tri_slicedcnt; i++) {
+GLvoid MoveSlicedtri(int value) {
 
-		slicedtri[i]->speed = { -0.02f, 0.01f, 0.0f };
-		slicedtri[i]->gravity = 0.0001f;
+	slicedtri[value]->speed.y -= slicedtri[value]->gravity;
+	slicedtri[value]->center += slicedtri[value]->speed;
 
-	}
+	if (slicedtri[value]->center.x <= -1.0f || slicedtri[value]->center.y <= -1.0f)
+		slicedtri[value]->draw = false;
+	else
+		glutTimerFunc(system_time, MoveSlicedtri, value);
 
-	for (int i = 0; i < tri_slicedcnt; i++) {
-		slicedtri[i]->speed = { -0.02f, 0.01f, 0.0f };
-		slicedtri[i]->gravity = 0.0001f;
-	}
+	glutPostRedisplay();
 
-	for (int i = 0; i < tri_slicedcnt; i++) {
-		slicedtri[i]->speed = { -0.02f, 0.01f, 0.0f };
-		slicedtri[i]->gravity = 0.0001f;
-	}
+}
+
+GLvoid MoveSlicedrect(int value) {
+
+	slicedrect[value]->speed.y -= slicedrect[value]->gravity;
+	slicedrect[value]->center += slicedrect[value]->speed;
+
+	if (slicedrect[value]->center.x <= -1.0f || slicedrect[value]->center.y <= -1.0f)
+		slicedrect[value]->draw = false;
+	else
+		glutTimerFunc(system_time, MoveSlicedrect, value);
+
+	glutPostRedisplay();
+}
+
+GLvoid MoveSlicedpent(int value) {
+
+	slicedpent[value]->speed.y -= slicedpent[value]->gravity;
+	slicedpent[value]->center += slicedpent[value]->speed;
+
+	if (slicedpent[value]->center.x <= -1.0f || slicedpent[value]->center.y <= -1.0f)
+		slicedpent[value]->draw = false;
+	else
+		glutTimerFunc(system_time, MoveSlicedpent, value);
+
 	glutPostRedisplay();
 }
