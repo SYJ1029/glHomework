@@ -322,28 +322,42 @@ GLvoid SetBuffer() {
 
 
 
-	for (int j = 0; j < MAX_PERDIAGRAM; j++) {
-		for (int i = 0; i < 3; i++) {
-			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-				3 * sizeof(GLfloat), tri[j]->pos[i]);
+	for (int j = 0; j < MAX_DIAGRAM; j++) {
 
-			(*counter) += 3 * sizeof(GLfloat);
+		switch (playground[j].postype) {
+		case ID_TRI:
+			for (int i = 0; i < 3; i++) {
+				glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+					3 * sizeof(GLfloat), tri[j]->pos[i]);
+
+				(*counter) += 3 * sizeof(GLfloat);
+			}
+			break;
+		case ID_RECT:
+			for (int i = 0; i < 4; i++) {
+				glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+					3 * sizeof(GLfloat), rect[j]->pos[i]);
+
+				(*counter) += 3 * sizeof(GLfloat);
+			}
+			break;
+		case ID_PENTA:
+			for (int i = 0; i < 5; i++) {
+				glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+					3 * sizeof(GLfloat), pent[j]->pos[i]);
+
+				(*counter) += 3 * sizeof(GLfloat);
+			}
+			break;
+		default:
+			break;
 		}
 
 
-		for (int i = 0; i < 4; i++) {
-			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-				3 * sizeof(GLfloat), rect[j]->pos[i]);
 
-			(*counter) += 3 * sizeof(GLfloat);
-		}
 
-		for (int i = 0; i < 5; i++) {
-			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-				3 * sizeof(GLfloat), pent[j]->pos[i]);
+	
 
-			(*counter) += 3 * sizeof(GLfloat);
-		}
 
 	}
 
