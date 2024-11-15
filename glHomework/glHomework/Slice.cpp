@@ -114,6 +114,23 @@ void Setindex() {
 	int begin = cnt;
 	int indextoken = 0;
 
+
+	for (int i = 0; i < MAX_DIAGRAM; i++) {
+
+		switch (playground[i].postype) {
+		case ID_TRI:
+
+			break;
+		case ID_RECT:
+
+			break;
+		case ID_PENTA:
+			break;
+		default:
+			break;
+		}
+	}
+
 	for (int i = 0; i < MAX_PERDIAGRAM; i++) {
 		tri[i]->start_index = index_count;
 		p1[i] = tri[i]->AddIndexList();
@@ -255,7 +272,11 @@ MyObjCol SetRandObjCol() {
 }
 
 
-GLvoid SetColor() {
+
+
+
+
+GLvoid main_SetColor() {
 	MyObjCol mycol[3];
 	MyObjCol mycol2[4];
 	MyObjCol mycol3[5];
@@ -307,7 +328,7 @@ GLvoid SetColor() {
 }
 
 
-GLvoid SetBuffer() {
+GLvoid main_SetBuffer() {
 	
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
@@ -413,7 +434,7 @@ GLvoid SetBuffer() {
 
 	(*counter) = 0;
 
-	for (int i = 0; i < 3 * (3 + 4 + 5); i++) {
+	for (int i = 0; i < MAX_DIAGRAM; i++) {
 		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
 			3 * sizeof(GLfloat), playground[i].col);
 
@@ -525,8 +546,8 @@ void main(int argc, char** argv) { //--- 윈도우 출력하고 콜백함수 설정 { //--- �
 
 	glBindVertexArray(vao);
 	InitDiagram();
-	SetColor();
-	SetBuffer();
+	main_SetColor();
+	main_SetBuffer();
 	Setplayground();
 	SetCamera();
 
@@ -588,7 +609,7 @@ void drawScene()
 
 	glBindVertexArray(vao);
 
-	SetBuffer();
+	main_SetBuffer();
 
 
 	int counter = 0;
@@ -892,10 +913,13 @@ GLvoid MyCw(int value) {
 
 GLvoid MyGen(int value) {
 
+	if (value >= MAX_DIAGRAM)
+		value %= MAX_DIAGRAM;
+
 	SetNewplayground(value);
 
-	glutTimerFunc(1, MyMove, value);
-	glutTimerFunc(1000, MyGen, (value + 1) % 3);
+	glutTimerFunc(system_time, MyMove, value);
+	glutTimerFunc(1000, MyGen, value + 1);
 }
 
 GLvoid MyThrow(int value) {
