@@ -24,7 +24,6 @@ public:
 	GLfloat gravity;
 	bool ccw;
 
-
 	GLfloat col[3];
 	QuadSetting qset;
 

@@ -115,4 +115,17 @@ GLvoid IsobjsProjed(bool proj) {
 
 
 
+GLvoid MoveSliced(int value) {
+	for (int i = 0; i < tri_slicedcnt; i++) {
 
+	}
+
+	for (int i = 0; i < tri_slicedcnt; i++) {
+
+	}
+
+	for (int i = 0; i < tri_slicedcnt; i++) {
+
+	}
+	glutPostRedisplay();
+}
