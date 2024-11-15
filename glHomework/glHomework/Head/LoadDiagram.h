@@ -5,6 +5,7 @@
 
 
 #define MAX_INDEX 12
+#define MAX_DIAGRAM 6
 #define MAX_PERDIAGRAM 3
 #define MAX_SLICE 300
 
@@ -25,7 +26,7 @@ GL_Line* line = new GL_Line();
 GLUquadricObj* qobj = gluNewQuadric();
 
 
-Diagram playground[3];
+Diagram playground[MAX_DIAGRAM];
 
 
 
@@ -59,7 +60,7 @@ GLvoid SetGraph(int index) {
 
 GLvoid Setplayground() {
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < MAX_DIAGRAM; i++) {
 
 		playground[i].center = { 1.5f, 0.0f, 0.0f };
 
