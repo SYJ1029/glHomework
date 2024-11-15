@@ -121,7 +121,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 	
 	int cnt;
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < MAX_DIAGRAM; i++) {
 
 
 		if (playground[i].center.x >= -1.0f && playground[i].center.x <= 1.0f &&
@@ -282,7 +282,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					}
 
 					slicedtri[cnt] = new GL_Tri(uppos);
-					slicedtri[cnt]->Setcol(tri[playground[i].indexcnt]->col);
+					slicedtri[cnt]->Setcol(playground[i].col);
 					
 					slicedtri[cnt]->center = playground[i].center;
 
@@ -316,7 +316,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					}
 
 					slicedrect[cnt] = new Rect(uppos);
-					slicedrect[cnt]->Setcol(rect[playground[i].indexcnt]->col);
+					slicedrect[cnt]->Setcol(playground[i].col);
 
 					slicedrect[cnt]->center = playground[i].center;
 
@@ -352,7 +352,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 
 					slicedpent[cnt] = new Pentagon(uppos);
-					slicedpent[cnt]->Setcol(pent[playground[i].indexcnt]->col);
+					slicedpent[cnt]->Setcol(playground[i].col);
 					
 					slicedpent[cnt]->center = playground[i].center;
 
@@ -401,7 +401,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					}
 
 					slicedtri[cnt] = new GL_Tri(bottompos);
-					slicedtri[cnt]->Setcol(tri[playground[i].indexcnt]->col);
+					slicedtri[cnt]->Setcol(playground[i].col);
 
 					slicedtri[cnt]->center = playground[i].center;
 
@@ -433,7 +433,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					}
 
 					slicedrect[cnt] = new Rect(bottompos);
-					slicedrect[cnt]->Setcol(rect[playground[i].indexcnt]->col);
+					slicedrect[cnt]->Setcol(playground[i].col);
 
 					slicedrect[cnt]->center = playground[i].center;
 
@@ -464,7 +464,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					bottompos[cnt + 1] = lineRect.pos1;
 
 					slicedpent[cnt] = new Pentagon(bottompos);
-					slicedpent[cnt]->Setcol(pent[playground[i].indexcnt]->col);
+					slicedpent[cnt]->Setcol(playground[i].col);
 
 					slicedpent[cnt]->center = playground[i].center;
 
