@@ -68,17 +68,17 @@ GLvoid Setplayground() {
 
 		playground[i].indexcnt = (int)((float)rand() / RAND_MAX * 2 + 0.5f);
 		SetGraph(i);
+
+		playground[i].postype = ((float)((float)rand() / RAND_MAX) * 2) + 3.5f;
 	}
 
-	playground[0].postype = ID_TRI;
 
-	playground[1].postype = ID_RECT;
-
-	playground[2].postype = ID_PENTA;
+	
 
 }
 
 GLvoid SetNewplayground(int i) {
+
 	playground[i].center = { 1.5f, 0.0f, 0.0f };
 
 	playground[i].radian = { 0.0f, 0.0f, 0.0f };
