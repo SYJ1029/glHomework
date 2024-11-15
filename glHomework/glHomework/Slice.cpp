@@ -104,9 +104,9 @@ void DepthCheck() {
 }
 
 void Setindex() {
-	int** p1 = (int**)malloc(3 * sizeof(int*));
-	int** p2 = (int**)malloc(3 * sizeof(int*));
-	int** p3 = (int**)malloc(3 * sizeof(int*));
+	int** p1 = (int**)malloc(MAX_DIAGRAM * sizeof(int*));
+	int** p2 = (int**)malloc(MAX_DIAGRAM * sizeof(int*));
+	int** p3 = (int**)malloc(MAX_DIAGRAM * sizeof(int*));
 
 
 	int present_bit = index_count;
@@ -293,6 +293,8 @@ void Setindex() {
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_DYNAMIC_DRAW);
+
+
 
 	free(p1);
 	free(p2);
