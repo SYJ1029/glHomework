@@ -118,14 +118,19 @@ GLvoid IsobjsProjed(bool proj) {
 GLvoid MoveSliced(int value) {
 	for (int i = 0; i < tri_slicedcnt; i++) {
 
+		slicedtri[i]->speed = { -0.02f, 0.01f, 0.0f };
+		slicedtri[i]->gravity = 0.0001f;
+
 	}
 
 	for (int i = 0; i < tri_slicedcnt; i++) {
-
+		slicedtri[i]->speed = { -0.02f, 0.01f, 0.0f };
+		slicedtri[i]->gravity = 0.0001f;
 	}
 
 	for (int i = 0; i < tri_slicedcnt; i++) {
-
+		slicedtri[i]->speed = { -0.02f, 0.01f, 0.0f };
+		slicedtri[i]->gravity = 0.0001f;
 	}
 	glutPostRedisplay();
 }
