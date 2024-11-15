@@ -23,6 +23,7 @@ public:
 	GLPos speed;
 	GLfloat gravity;
 	bool ccw;
+	bool draw;
 
 	GLfloat col[3];
 	QuadSetting qset;
@@ -53,7 +54,7 @@ public:
 
 		gravity = 1.0f;
 		ccw = true;
-
+		draw = true;
 
 
 		qset.drawstyle = GLU_FILL;
