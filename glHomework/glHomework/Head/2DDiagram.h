@@ -29,6 +29,9 @@ public:
 	QuadSetting qset;
 
 
+	int start_index;
+	int mulcount;
+
 	queue<GLPos> fifo;
 
 	Diagram() {
@@ -60,6 +63,9 @@ public:
 		qset.drawstyle = GLU_FILL;
 		qset.normals = GLU_SMOOTH;
 		qset.orientation = GLU_OUTSIDE;
+
+		start_index = 0;
+		mulcount = 1;
 	}
 
 
@@ -153,8 +159,6 @@ public:
 	GLPos Stretch;
 	GLfloat col[3][3];
 
-	int mulcount;
-	int start_index;
 
 
 	GL_Tri() : Diagram(){
@@ -290,8 +294,6 @@ public:
 	GLfloat col[4][3];
 	GLPos Stretch;
 
-	int mulcount;
-	int start_index;
 
 
 	Rect() : Diagram(){		
@@ -424,8 +426,6 @@ public:
 	GLfloat col[5][3];
 	GLPos Stretch;
 
-	int mulcount;
-	int start_index;
 
 	Pentagon() : Diagram() {
 		this->pos[0][0] = -0.5f, this->pos[0][1] = -0.6882f, this->pos[0][2] = 0.0f;
