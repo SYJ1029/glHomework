@@ -213,10 +213,10 @@ public:
 		}
 	}
 
-	void Setcol(GLfloat col[3][3]) {
+	void Setcol(GLfloat col[3]) {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
-				this->col[i][j] = col[i][j];
+				this->col[i][j] = col[j];
 			}
 		}
 	}
@@ -344,10 +344,10 @@ public:
 		}
 	}
 
-	void Setcol(GLfloat col[4][3]) {
+	void Setcol(GLfloat col[3]) {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 3; j++) {
-				this->col[i][j] = col[i][j];
+				this->col[i][j] = col[j];
 			}
 		}
 	}
@@ -476,10 +476,10 @@ public:
 		}
 	}
 
-	void Setcol(GLfloat col[5][3]) {
+	void Setcol(GLfloat col[3]) {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 3; j++) {
-				this->col[i][j] = col[i][j];
+				this->col[i][j] = col[j];
 			}
 		}
 	}
