@@ -119,19 +119,57 @@ void Setindex() {
 
 		switch (playground[i].postype) {
 		case ID_TRI:
+			playground[i].start_index = index_count;
+			p1[i] = tri[i]->AddIndexList();
+
+			for (index_count; index_count < present_bit + 3; index_count++) {
+				index[index_count] = indextoken + p1[i][index_count - begin];
+
+				cnt++;
+			}
+
+
+			present_bit = index_count;
+
+			indextoken += 3;
+			begin = cnt;
 
 			break;
 		case ID_RECT:
+			playground[i].start_index = index_count;
+			p2[i] = rect[i]->AddIndexList();
+			for (index_count; index_count < present_bit + 6; index_count++) {
+				index[index_count] = indextoken + p2[i][index_count - begin];
 
+				cnt++;
+			}
+			indextoken += 4;
+
+			present_bit = index_count;
+			begin = cnt;
 			break;
 		case ID_PENTA:
+
+			playground[i].start_index = index_count;
+			p3[i] = pent[i]->AddIndexList();
+
+			for (index_count; index_count < present_bit + 9; index_count++) {
+				index[index_count] = indextoken + p3[i][index_count - begin];
+
+				cnt++;
+			}
+
+
+			indextoken += 5;
+			present_bit = index_count;
+			begin = cnt;
 			break;
 		default:
 			break;
 		}
 	}
 
-	for (int i = 0; i < MAX_PERDIAGRAM; i++) {
+	/*for (int i = 0; i < MAX_PERDIAGRAM; i++) {
 		tri[i]->start_index = index_count;
 		p1[i] = tri[i]->AddIndexList();
 
@@ -174,7 +212,7 @@ void Setindex() {
 		indextoken += 5;
 		present_bit = index_count;
 		begin = cnt;
-	}
+	}*/
 
 
 
@@ -344,12 +382,12 @@ GLvoid main_SetBuffer() {
 
 
 	for (int j = 0; j < MAX_DIAGRAM; j++) {
-
+		
 		switch (playground[j].postype) {
 		case ID_TRI:
 			for (int i = 0; i < 3; i++) {
 				glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-					3 * sizeof(GLfloat), tri[j]->pos[i]);
+					3 * sizeof(GLfloat), tri[0]->pos[i]);
 
 				(*counter) += 3 * sizeof(GLfloat);
 			}
@@ -357,7 +395,7 @@ GLvoid main_SetBuffer() {
 		case ID_RECT:
 			for (int i = 0; i < 4; i++) {
 				glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-					3 * sizeof(GLfloat), rect[j]->pos[i]);
+					3 * sizeof(GLfloat), rect[0]->pos[i]);
 
 				(*counter) += 3 * sizeof(GLfloat);
 			}
@@ -365,7 +403,7 @@ GLvoid main_SetBuffer() {
 		case ID_PENTA:
 			for (int i = 0; i < 5; i++) {
 				glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-					3 * sizeof(GLfloat), pent[j]->pos[i]);
+					3 * sizeof(GLfloat), pent[0]->pos[i]);
 
 				(*counter) += 3 * sizeof(GLfloat);
 			}
@@ -384,11 +422,13 @@ GLvoid main_SetBuffer() {
 
 
 
-	for (int i = 0; i < 2; i++) {
-		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-			3 * sizeof(GLfloat), line->pos[i]);
+	if (line->draw) {
+		for (int i = 0; i < 2; i++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), line->pos[i]);
 
-		(*counter) += 3 * sizeof(GLfloat);
+			(*counter) += 3 * sizeof(GLfloat);
+		}
 	}
 
 
@@ -435,10 +475,13 @@ GLvoid main_SetBuffer() {
 	(*counter) = 0;
 
 	for (int i = 0; i < MAX_DIAGRAM; i++) {
-		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-			3 * sizeof(GLfloat), playground[i].col);
 
-		(*counter) += 3 * sizeof(GLfloat);
+		for (int j = 0; j < playground[i].postype; j++) {
+			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+				3 * sizeof(GLfloat), playground[i].col);
+
+			(*counter) += 3 * sizeof(GLfloat);
+		}
 
 	}
 
@@ -617,7 +660,7 @@ void drawScene()
 
 
 
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < MAX_DIAGRAM; i++) {
 		model = basemat;
 
 		gluQuadricDrawStyle(qobj, playground[i].qset.drawstyle);
@@ -644,17 +687,16 @@ void drawScene()
 
 
 
-
+		counter = playground[i].start_index;
 
 
 		switch (playground[i].postype) {
 		case ID_TRI:
 
 
-			counter = tri[playground[i].indexcnt]->start_index;
 			submodel = model;
 
-			submodel *= tri[playground[i].indexcnt]->GetWorldTransMatrix();
+			submodel *= tri[0]->GetWorldTransMatrix();
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
 
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
@@ -662,22 +704,21 @@ void drawScene()
 			counter += 3;
 			break;
 		case ID_RECT:
-			counter = rect[playground[i].indexcnt]->start_index;
 			submodel = model;
 
-			submodel *= rect[playground[i].indexcnt]->GetWorldTransMatrix();
+			submodel *= rect[0]->GetWorldTransMatrix();
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
 
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
 			counter += 6;
 			break;
 		case ID_PENTA:
-			counter = pent[playground[i].indexcnt]->start_index;
 			submodel = model;
-			submodel *= pent[playground[i].indexcnt]->GetWorldTransMatrix();
+			submodel *= pent[0]->GetWorldTransMatrix();
 			glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(submodel));
 			glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, (void*)(counter * sizeof(GLfloat)));
 
+			counter += 9;
 			break;
 		case ID_OCTA:
 			//gluSphere(qobj, sphere->radius, sphere->slices, sphere->stacks);
