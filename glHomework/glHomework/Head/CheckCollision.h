@@ -286,12 +286,14 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					
 					slicedtri[cnt]->center = playground[i].center;
 
-					slicedtri[cnt]->speed = { -0.02f, 0.01f, 0.0f };
+					slicedtri[cnt]->speed = { -0.01f, 0.005f, 0.0f };
 					slicedtri[cnt]->gravity = 0.0001f;
 
 					if(cnt >= tri_slicedcnt)
 						tri_slicedcnt++;
 
+
+					glutTimerFunc(system_time, MoveSlicedtri, cnt);
 					break;
 				case ID_RECT:
 					cout << "4" << endl;
@@ -318,11 +320,13 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 					slicedrect[cnt]->center = playground[i].center;
 
-					slicedrect[cnt]->speed = { -0.02f, 0.01f, 0.0f };
+					slicedrect[cnt]->speed = { -0.01f, 0.005f, 0.0f };
 					slicedrect[cnt]->gravity = 0.0001f;
 
 					if(cnt >= rect_slicedcnt)
 						rect_slicedcnt++;
+
+					glutTimerFunc(system_time, MoveSlicedrect, cnt);
 					break;
 				case ID_PENTA:
 					cout << "5" << endl;
@@ -352,12 +356,15 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					
 					slicedpent[cnt]->center = playground[i].center;
 
-					slicedtri[cnt]->speed = { -0.02f, 0.01f, 0.0f };
-					slicedtri[cnt]->gravity = 0.0001f;
+					slicedpent[cnt]->speed = { -0.01f, 0.005f, 0.0f };
+					slicedpent[cnt]->gravity = 0.0001f;
 
 
 					if(cnt >= pent_slicedcnt)
 						pent_slicedcnt++;
+
+					glutTimerFunc(system_time, MoveSlicedpent, cnt);
+
 					break;
 				case ID_OCTA:
 					cout << "6" << endl;
@@ -388,17 +395,23 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					bottompos[cnt] = lineRect.pos2;
 					bottompos[cnt + 1] = lineRect.pos1;
 
-					slicedtri[tri_slicedcnt] = new GL_Tri(bottompos);
-					slicedtri[tri_slicedcnt]->Setcol(tri[playground[i].indexcnt]->col);
+					for (cnt = 0; cnt < tri_slicedcnt; cnt++) {
+						if (slicedtri[cnt]->draw == false)
+							break;
+					}
 
-					slicedtri[tri_slicedcnt]->center = playground[i].center;
+					slicedtri[cnt] = new GL_Tri(bottompos);
+					slicedtri[cnt]->Setcol(tri[playground[i].indexcnt]->col);
 
+					slicedtri[cnt]->center = playground[i].center;
 
-					slicedtri[tri_slicedcnt]->speed = { 0.02f, 0.01f, 0.0f };
-					slicedtri[tri_slicedcnt]->gravity = 0.0001f;
+					slicedtri[cnt]->speed = { 0.01f, 0.005f, 0.0f };
+					slicedtri[cnt]->gravity = 0.0001f;
 
-					tri_slicedcnt++;
+					if (cnt >= tri_slicedcnt)
+						tri_slicedcnt++;
 
+					glutTimerFunc(system_time, MoveSlicedtri, cnt);
 					break;
 				case ID_RECT:
 					cout << "4" << endl;
@@ -414,12 +427,23 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					bottompos[cnt] = lineRect.pos2;
 					bottompos[cnt + 1] = lineRect.pos1;
 
-					slicedrect[rect_slicedcnt] = new Rect(bottompos);
-					slicedrect[rect_slicedcnt]->Setcol(rect[playground[i].indexcnt]->col);
+					for (cnt = 0; cnt < rect_slicedcnt; cnt++) {
+						if (slicedrect[cnt]->draw == false)
+							break;
+					}
 
-					slicedrect[rect_slicedcnt]->center = playground[i].center;
+					slicedrect[cnt] = new Rect(bottompos);
+					slicedrect[cnt]->Setcol(rect[playground[i].indexcnt]->col);
 
-					rect_slicedcnt++;
+					slicedrect[cnt]->center = playground[i].center;
+
+					slicedrect[cnt]->speed = { 0.01f, 0.005f, 0.0f };
+					slicedrect[cnt]->gravity = 0.0001f;
+
+					if (cnt >= rect_slicedcnt)
+						rect_slicedcnt++;
+
+					glutTimerFunc(system_time, MoveSlicedrect, cnt);
 					break;
 				case ID_PENTA:
 					cout << "5" << endl;
@@ -431,16 +455,27 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 						bottomlist.pop_front();
 					}
 
+					for (cnt = 0; cnt < pent_slicedcnt; cnt++) {
+						if (slicedpent[cnt]->draw == false)
+							break;
+					}
+
 					bottompos[cnt] = lineRect.pos2;
 					bottompos[cnt + 1] = lineRect.pos1;
 
+					slicedpent[cnt] = new Pentagon(bottompos);
+					slicedpent[cnt]->Setcol(pent[playground[i].indexcnt]->col);
 
-					slicedpent[pent_slicedcnt] = new Pentagon(bottompos);
-					slicedpent[pent_slicedcnt]->Setcol(pent[playground[i].indexcnt]->col);
+					slicedpent[cnt]->center = playground[i].center;
 
-					slicedpent[pent_slicedcnt]->center = playground[i].center;
+					slicedpent[cnt]->speed = { -0.01f, 0.005f, 0.0f };
+					slicedpent[cnt]->gravity = 0.0001f;
 
-					pent_slicedcnt++;
+
+					if (cnt >= pent_slicedcnt)
+						pent_slicedcnt++;
+
+					glutTimerFunc(system_time, MoveSlicedpent, cnt);
 					break;
 				case ID_OCTA:
 					cout << "6" << endl;
