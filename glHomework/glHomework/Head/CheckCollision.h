@@ -286,7 +286,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					
 					slicedtri[cnt]->center = playground[i].center;
 
-					slicedtri[cnt]->speed = { -0.01f, 0.005f, 0.0f };
+					slicedtri[cnt]->speed = { -0.005f, 0.005f, 0.0f };
 					slicedtri[cnt]->gravity = 0.0001f;
 
 					if(cnt >= tri_slicedcnt)
@@ -320,7 +320,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 					slicedrect[cnt]->center = playground[i].center;
 
-					slicedrect[cnt]->speed = { -0.01f, 0.005f, 0.0f };
+					slicedrect[cnt]->speed = { -0.005f, 0.005f, 0.0f };
 					slicedrect[cnt]->gravity = 0.0001f;
 
 					if(cnt >= rect_slicedcnt)
@@ -356,7 +356,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 					
 					slicedpent[cnt]->center = playground[i].center;
 
-					slicedpent[cnt]->speed = { -0.01f, 0.005f, 0.0f };
+					slicedpent[cnt]->speed = { -0.005f, 0.005f, 0.0f };
 					slicedpent[cnt]->gravity = 0.0001f;
 
 
@@ -405,7 +405,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 					slicedtri[cnt]->center = playground[i].center;
 
-					slicedtri[cnt]->speed = { 0.01f, 0.005f, 0.0f };
+					slicedtri[cnt]->speed = { 0.005f, 0.005f, 0.0f };
 					slicedtri[cnt]->gravity = 0.0001f;
 
 					if (cnt >= tri_slicedcnt)
@@ -437,7 +437,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 					slicedrect[cnt]->center = playground[i].center;
 
-					slicedrect[cnt]->speed = { 0.01f, 0.005f, 0.0f };
+					slicedrect[cnt]->speed = { 0.005f, 0.005f, 0.0f };
 					slicedrect[cnt]->gravity = 0.0001f;
 
 					if (cnt >= rect_slicedcnt)
@@ -468,7 +468,7 @@ void CheckingLoop(float theta, GLPos line1, GLPos line2) {
 
 					slicedpent[cnt]->center = playground[i].center;
 
-					slicedpent[cnt]->speed = { -0.01f, 0.005f, 0.0f };
+					slicedpent[cnt]->speed = { -0.005f, 0.005f, 0.0f };
 					slicedpent[cnt]->gravity = 0.0001f;
 
 

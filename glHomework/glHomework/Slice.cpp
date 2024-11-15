@@ -741,6 +741,8 @@ void drawScene()
 	}
 
 
+
+
 	model = glm::mat4(1.0f);
 
 	for (int i = 0; i < tri_slicedcnt; i++) {
