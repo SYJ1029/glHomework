@@ -264,6 +264,12 @@ GLvoid SetColor() {
 	MyObjCol coltoken = SetRandObjCol();
 
 
+	for (int i = 0; i < 3; i++) {
+		coltoken = SetRandObjCol();
+
+		playground[i].Setcol(coltoken);
+	}
+
 	for (int j = 0; j < MAX_PERDIAGRAM; j++) {
 		for (int i = 0; i < 3; i++) {
 			mycol[i] = coltoken;
@@ -284,6 +290,7 @@ GLvoid SetColor() {
 			mycol3[i] = coltoken;
 		}
 		pent[j]->Setcol(mycol3);
+
 	}
 
 	for (int i = 0; i < 2; i++) {
@@ -293,6 +300,10 @@ GLvoid SetColor() {
 	}
 	coltoken = SetRandObjCol();
 	line->Setcol(mycol4);
+
+
+
+	
 }
 
 
@@ -388,32 +399,39 @@ GLvoid SetBuffer() {
 
 	(*counter) = 0;
 
-	for (int j = 0; j < MAX_PERDIAGRAM; j++) {
+	for (int i = 0; i < 3 * (3 + 4 + 5); i++) {
+		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+			3 * sizeof(GLfloat), playground[i % 3].col);
 
-		for (int i = 0; i < 3; i++) {
-			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-				3 * sizeof(GLfloat), tri[j]->col[i]);
+		(*counter) += 3 * sizeof(GLfloat);
 
-			(*counter) += 3 * sizeof(GLfloat);
-
-			//cout << "(" << cube.pos[i][0] << ", " << cube.pos[i][1] << ", " << cube.pos[i][2] << ')' << endl << endl;
-		}
-
-
-		for (int i = 0; i < 4; i++) {
-			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-				3 * sizeof(GLfloat), rect[j]->col[i]);
-
-			(*counter) += 3 * sizeof(GLfloat);
-		}
-
-		for (int i = 0; i < 5; i++) {
-			glBufferSubData(GL_ARRAY_BUFFER, (*counter),
-				3 * sizeof(GLfloat), pent[j]->col[i]);
-
-			(*counter) += 3 * sizeof(GLfloat);
-		}
 	}
+
+	//for (int j = 0; j < MAX_PERDIAGRAM; j++) {
+
+	//	for (int i = 0; i < 3; i++) {
+	//		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+	//			3 * sizeof(GLfloat), playground[j].col);
+
+	//		(*counter) += 3 * sizeof(GLfloat);
+
+	//	}
+
+
+	//	for (int i = 0; i < 4; i++) {
+	//		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+	//			3 * sizeof(GLfloat), playground[j].col);
+
+	//		(*counter) += 3 * sizeof(GLfloat);
+	//	}
+
+	//	for (int i = 0; i < 5; i++) {
+	//		glBufferSubData(GL_ARRAY_BUFFER, (*counter),
+	//			3 * sizeof(GLfloat), playground[j].col);
+
+	//		(*counter) += 3 * sizeof(GLfloat);
+	//	}
+	//}
 
 
 
