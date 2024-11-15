@@ -121,7 +121,7 @@ GLvoid MoveSlicedtri(int value) {
 	slicedtri[value]->speed.y -= slicedtri[value]->gravity;
 	slicedtri[value]->center += slicedtri[value]->speed;
 
-	if (slicedtri[value]->center.x <= -1.0f || slicedtri[value]->center.y <= -1.0f)
+	if (slicedtri[value]->center.x <= -1.5f || slicedtri[value]->center.y <= -1.0f)
 		slicedtri[value]->draw = false;
 	else
 		glutTimerFunc(system_time, MoveSlicedtri, value);
@@ -135,7 +135,7 @@ GLvoid MoveSlicedrect(int value) {
 	slicedrect[value]->speed.y -= slicedrect[value]->gravity;
 	slicedrect[value]->center += slicedrect[value]->speed;
 
-	if (slicedrect[value]->center.x <= -1.0f || slicedrect[value]->center.y <= -1.0f)
+	if (slicedrect[value]->center.x <= -1.5f || slicedrect[value]->center.y <= -1.0f)
 		slicedrect[value]->draw = false;
 	else
 		glutTimerFunc(system_time, MoveSlicedrect, value);
@@ -148,7 +148,7 @@ GLvoid MoveSlicedpent(int value) {
 	slicedpent[value]->speed.y -= slicedpent[value]->gravity;
 	slicedpent[value]->center += slicedpent[value]->speed;
 
-	if (slicedpent[value]->center.x <= -1.0f || slicedpent[value]->center.y <= -1.0f)
+	if (slicedpent[value]->center.x <= -1.5f || slicedpent[value]->center.y <= -1.0f)
 		slicedpent[value]->draw = false;
 	else
 		glutTimerFunc(system_time, MoveSlicedpent, value);
